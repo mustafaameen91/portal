@@ -77,7 +77,7 @@ Mark.findById = (userId, result) => {
 
 Mark.updateById = (markData, result) => {
    sql.query(
-      `UPDATE marks SET studentId = ${markData.studentId} , lessonId = ${markData.lessonId} , coHeadId = ${markData.coHeadId} , theoreticalMark = ${markData.theoreticalMark} , practicalMark = ${markData.practicalMark} , finalMark = ${markData.finalMark} , final2 = ${markData.final2}  WHERE idMark = ${markData.idMark}`,
+      `UPDATE marks SET studentId = ${markData.studentId} , lessonId = ${markData.lessonId} , coHeadId = ${markData.coHeadId} , theoreticalMark = ${markData.theoreticalMark} , practicalMark = ${markData.practicalMark} , finalMark = ${markData.finalMark} , final2 = ${markData.final2} ,status = ${markData.status}, status2 = ${markData.status2}  WHERE idMark = ${markData.idMark}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
