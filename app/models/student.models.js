@@ -112,7 +112,7 @@ Student.getByCollageNumber = (collegeNumber, result) => {
 Student.getStudentInfo = (startIndex, endIndex, infoQuery, result) => {
    console.log(infoQuery);
    sql.query(
-      `SELECT * FROM Student WHERE 1=1 ${infoQuery}  ORDER BY name ASC LIMIT ${startIndex},${endIndex}`,
+      `SELECT * FROM student WHERE 1=1 ${infoQuery}  ORDER BY name ASC LIMIT ${startIndex},${endIndex}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
