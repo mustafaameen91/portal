@@ -17,6 +17,7 @@ exports.create = (req, res) => {
       final2: req.body.final2,
       lift: req.body.lift,
       status: req.body.status,
+      status2: req.body.status2,
    });
 
    if (req.body.id) {
@@ -31,6 +32,7 @@ exports.create = (req, res) => {
          final2: req.body.final2,
          lift: req.body.lift,
          status: req.body.status,
+         status2: req.body.status2,
       };
       Marks.updateById(markData, (err, data) => {
          if (err) {

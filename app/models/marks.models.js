@@ -11,6 +11,7 @@ const Mark = function (mark) {
    this.final2 = mark.final2;
    this.lift = mark.lift;
    this.status = mark.status;
+   this.status2 = mark.status2;
 };
 
 Mark.create = (newMark, result) => {
