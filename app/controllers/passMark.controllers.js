@@ -1,4 +1,4 @@
-const Marks = require("../models/marks.models.js");
+const PassMark = require("../models/passMark.models.js");
 
 exports.create = (req, res) => {
    if (!req.body) {
@@ -6,7 +6,7 @@ exports.create = (req, res) => {
          message: "Content can not be empty!",
       });
    }
-   const marks = new Marks({
+   const passMark = new PassMark({
       studentId: req.body.studentId,
       lessonId: req.body.lessonId,
       coHeadId: req.body.coHeadId,
@@ -17,8 +17,6 @@ exports.create = (req, res) => {
       lift: req.body.lift,
       status: req.body.status,
       status2: req.body.status2,
-      theoreticalMark2: req.body.theoreticalMark2,
-      practicalMark2: req.body.practicalMark2,
    });
 
    if (req.body.id) {
@@ -37,7 +35,7 @@ exports.create = (req, res) => {
          theoreticalMark2: req.body.theoreticalMark2,
          practicalMark2: req.body.practicalMark2,
       };
-      Marks.updateById(markData, (err, data) => {
+      PassMark.updateById(markData, (err, data) => {
          if (err) {
             if (err.kind === "not_found") {
                res.status(404).send({
@@ -51,7 +49,7 @@ exports.create = (req, res) => {
          } else res.send(data);
       });
    } else {
-      Marks.create(marks, (err, data) => {
+      PassMark.create(marks, (err, data) => {
          if (err)
             res.status(500).send({
                message:
@@ -84,7 +82,7 @@ exports.findAll = (req, res) => {
       sqlQuery += `AND status = '${status}' `;
    }
 
-   Marks.getAll(sqlQuery, (err, data) => {
+   PassMark.getAll(sqlQuery, (err, data) => {
       if (err)
          res.status(500).send({
             message:
@@ -107,7 +105,7 @@ exports.findLiftDegree = (req, res) => {
       sqlQuery += `AND lessonId in (${lessonsId}) `;
    }
 
-   Marks.getLiftAll(sqlQuery, (err, data) => {
+   PassMark.getLiftAll(sqlQuery, (err, data) => {
       if (err)
          res.status(500).send({
             message:
@@ -118,7 +116,7 @@ exports.findLiftDegree = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-   Marks.findById(req.params.id, (err, data) => {
+   PassMark.findById(req.params.id, (err, data) => {
       if (err) {
          if (err.kind === "not_found") {
             res.status(404).send({
@@ -145,7 +143,7 @@ exports.updateLift = (req, res) => {
       lift: req.body.lift,
    };
 
-   Marks.updateLiftData(liftData, (err, data) => {
+   PassMark.updateLiftData(liftData, (err, data) => {
       if (err) {
          if (err.kind === "not_found") {
             res.status(404).send({
@@ -172,7 +170,7 @@ exports.updateStatusData = (req, res) => {
       status: req.body.status,
    };
 
-   Marks.updateStatus(liftData, (err, data) => {
+   PassMark.updateStatus(liftData, (err, data) => {
       if (err) {
          if (err.kind === "not_found") {
             res.status(404).send({
@@ -188,7 +186,7 @@ exports.updateStatusData = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-   Marks.remove(req.params.id, (err, data) => {
+   PassMark.remove(req.params.id, (err, data) => {
       if (err) {
          if (err.kind === "not_found") {
             res.status(404).send({

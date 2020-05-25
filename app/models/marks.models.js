@@ -12,6 +12,8 @@ const Mark = function (mark) {
    this.lift = mark.lift;
    this.status = mark.status;
    this.status2 = mark.status2;
+   this.practicalMark2 = mark.practicalMark2;
+   this.theoreticalMark2 = mark.theoreticalMark2;
 };
 
 Mark.create = (newMark, result) => {
@@ -29,7 +31,7 @@ Mark.create = (newMark, result) => {
 
 Mark.getAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT *,(theoreticalMark + practicalMark + finalMark ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 )) AS finalMark2 , (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
+      `SELECT *,(theoreticalMark + practicalMark + finalMark ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 )) AS finalMark2,(theoreticalMark2 + practicalMark2 + finalMark ) AS aFinalMark1 ,IF(final2 =0 ,0,(theoreticalMark2 + practicalMark2 + final2 )) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -44,7 +46,7 @@ Mark.getAll = (sqlQuery, result) => {
 
 Mark.getLiftAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT *, (theoreticalMark + practicalMark + finalMark + lift ) As finalMark1 ,(theoreticalMark + practicalMark + final2 + lift ) As finalMark2 FROM marks WHERE (theoreticalMark + practicalMark + finalMark ) < 50 AND (theoreticalMark + practicalMark + final2 ) < 50 ${sqlQuery} ORDER BY finalMark1`,
+      `SELECT *, (theoreticalMark + practicalMark + finalMark + lift ) As finalMark1 ,(theoreticalMark + practicalMark + final2 + lift ) As finalMark2 , (theoreticalMark2 + practicalMark2 + finalMark + lift ) As aFindMark ,  (theoreticalMark2 + practicalMark2 + final2 + lift ) As aFinalMark2 FROM marks WHERE (theoreticalMark + practicalMark + finalMark ) < 50 AND (theoreticalMark + practicalMark + final2 ) < 50 ${sqlQuery} ORDER BY finalMark1`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -77,7 +79,7 @@ Mark.findById = (userId, result) => {
 
 Mark.updateById = (markData, result) => {
    sql.query(
-      `UPDATE marks SET studentId = ${markData.studentId} , lessonId = ${markData.lessonId} , coHeadId = ${markData.coHeadId} , theoreticalMark = ${markData.theoreticalMark} , practicalMark = ${markData.practicalMark} , finalMark = ${markData.finalMark} , final2 = ${markData.final2} ,status = ${markData.status}, status2 = ${markData.status2}  WHERE idMark = ${markData.idMark}`,
+      `UPDATE marks SET studentId = ${markData.studentId} , lessonId = ${markData.lessonId} , coHeadId = ${markData.coHeadId} , theoreticalMark = ${markData.theoreticalMark} , practicalMark = ${markData.practicalMark} , theoreticalMark2 = ${markData.theoreticalMark2} , practicalMark2 = ${markData.practicalMark2} ,finalMark = ${markData.finalMark} , final2 = ${markData.final2} ,status = ${markData.status}, status2 = ${markData.status2}  WHERE idMark = ${markData.idMark}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
