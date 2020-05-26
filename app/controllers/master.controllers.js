@@ -1,4 +1,5 @@
 const MasterSheet = require("../models/master.models.js");
+const md5 = require("md5");
 
 exports.create = (req, res) => {
    if (!req.body) {
@@ -6,12 +7,8 @@ exports.create = (req, res) => {
          message: "Content can not be empty!",
       });
    }
-   const masterSheet = new MasterSheet({
-      masterKey: req.body.masterKey,
-      note: req.body.note,
-   });
 
-   let masterKeyB64 = Buffer.from(req.body.masterKey).toString("base64");
+   let masterKeyB64 = md5(req.body.masterKey);
 
    MasterSheet.checkKey(masterKeyB64, (err, data) => {
       if (data.length > 0) {
@@ -65,8 +62,6 @@ exports.update = (req, res) => {
          message: "Content can not be empty!",
       });
    }
-
-   console.log(req.body.note);
 
    MasterSheet.updateById(req.params.id, req.body.note, (err, data) => {
       if (err) {
