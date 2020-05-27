@@ -33,16 +33,19 @@ Lesson.create = (newLesson, result) => {
 };
 
 Lesson.getAll = (sqlQuery, result) => {
-   sql.query(`SELECT * FROM lesson WHERE 1=1 ${sqlQuery}`, (err, res) => {
-      if (err) {
-         console.log("error: ", err);
-         result(null, err);
-         return;
-      }
+   sql.query(
+      `SELECT * ,(SELECT name FROM section WHERE lesson.sectionid = section.id) AS sectionName FROM lesson WHERE 1=1 ${sqlQuery}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
 
-      // console.log("lessons: ", res);
-      result(null, res);
-   });
+         // console.log("lessons: ", res);
+         result(null, res);
+      }
+   );
 };
 
 Lesson.findById = (lessonId, result) => {
