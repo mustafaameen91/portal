@@ -61,12 +61,17 @@ exports.teacherLogin = (req, res) => {
    let password = req.body.password;
 
    Teacher.loginTeacher(email, password, (err, data) => {
-      if (err)
-         res.status(500).send({
-            message:
-               err.message || "Some error occurred while retrieving teacher.",
-         });
-      else res.send(data);
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found teacher.`,
+            });
+         } else {
+            res.status(500).send({
+               message: "Some error occurred while retrieving teacher.",
+            });
+         }
+      } else res.send(data);
    });
 };
 

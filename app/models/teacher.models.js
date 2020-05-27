@@ -49,7 +49,7 @@ Teacher.getAll = (sqlQuery, result) => {
 
 Teacher.loginTeacher = (email, password, result) => {
    sql.query(
-      `SELECT * FROM teacher WHERE email = '${email}' AND password = '${password}'`,
+      `SELECT * ,(SELECT val FROM \`system\` WHERE var = \'currentYear\') AS currentYear  FROM teacher WHERE email = '${email}' AND password = '${password}'`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -57,8 +57,13 @@ Teacher.loginTeacher = (email, password, result) => {
             return;
          }
 
-         console.log("teacher: ", res);
-         result(null, res[0]);
+         if (res.length) {
+            console.log("found teacher: ", res[0]);
+            result(null, res[0]);
+            return;
+         }
+
+         result({ kind: "not_found" }, null);
       }
    );
 };
