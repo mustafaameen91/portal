@@ -9,6 +9,7 @@ const MasterHistory = function (masterHistory) {
    this.class = masterHistory.class;
    this.level = masterHistory.level;
    this.year = masterHistory.year;
+   this.leveltype = masterHistory.leveltype;
 };
 
 MasterHistory.create = (newMasterHistory, result) => {
@@ -47,6 +48,27 @@ MasterHistory.getAll = (result) => {
 MasterHistory.findById = (historyId, result) => {
    sql.query(
       `SELECT * FROM masterHistory WHERE idHistory = ${historyId}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+         }
+
+         if (res.length) {
+            console.log("found MasterHistory: ", res[0]);
+            result(null, res[0]);
+            return;
+         }
+
+         result({ kind: "not_found" }, null);
+      }
+   );
+};
+
+MasterHistory.findByMasterKey = (masterKey, result) => {
+   sql.query(
+      `SELECT * , 'ok' AS message FROM masterHistory WHERE masterKey = '${masterKey}'`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

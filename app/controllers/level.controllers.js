@@ -14,19 +14,28 @@ exports.create = (req, res) => {
       year: req.body.year,
    });
 
-   Level.create(level, (err, data) => {
-      if (err)
-         res.status(500).send({
-            message:
-               err.message || "Some error occurred while creating the level.",
+   Level.foundLevel(level, (err, data) => {
+      console.log(data);
+      if (data.length != 0) {
+         res.send(level);
+      } else {
+         Level.create(level, (err, data) => {
+            if (err)
+               res.status(500).send({
+                  message:
+                     err.message ||
+                     "Some error occurred while creating the level.",
+               });
+            else res.send(data);
          });
-      else res.send(data);
+      }
    });
 };
 
 exports.findAll = (req, res) => {
    let year = req.query.year;
    let sectionId = req.query.sectionId;
+   let level = req.query.level;
 
    let sqlQuery = "";
    if (year) {
@@ -34,6 +43,9 @@ exports.findAll = (req, res) => {
    }
    if (sectionId) {
       sqlQuery += `AND sectionId = '${sectionId}' `;
+   }
+   if (level) {
+      sqlQuery += `AND level = '${level}' `;
    }
    Level.getAll(sqlQuery, (err, data) => {
       if (err)

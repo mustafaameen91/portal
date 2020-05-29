@@ -29,9 +29,54 @@ Mark.create = (newMark, result) => {
    });
 };
 
+Mark.getReport = (sqlQuery, finalType, exam, result) => {
+   sql.query(
+      `SELECT marks.idMark, marks.studentId,marks.lessonId ,marks.coHeadId,marks.theoreticalMark,marks.markDate,marks.practicalMark,marks.finalMark,marks.final2,marks.lift,marks.status,marks.status2,marks.practicalMark2,marks.theoreticalMark2, student.id , student.name,student.sectionid,student.level,student.class,student.sex,student.type ,COUNT(*) AS totalFail, SUM(theoreticalMark + practicalMark + ${finalType} +  ${exam}) / COUNT(studentId) AS average FROM marks JOIN student WHERE marks.studentId=student.id ${sqlQuery} GROUP BY studentId ORDER BY SUM(theoreticalMark + practicalMark + finalMark) / COUNT(studentId) DESC`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         result(null, res);
+      }
+   );
+};
+
+Mark.getStudentFail = (type, final, studentId, result) => {
+   sql.query(
+      `SELECT * ,(SELECT name FROM lesson WHERE marks.lessonId = lesson.id) AS lessonName FROM marks WHERE (theoreticalMark + practicalMark + ${final} + ${type}) < 50 AND studentId = ${studentId}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         result(null, res);
+      }
+   );
+};
+
 Mark.getAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT *,(theoreticalMark + practicalMark + finalMark ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 )) AS finalMark2,(theoreticalMark2 + practicalMark2 + finalMark ) AS aFinalMark1 ,IF(final2 =0 ,0,(theoreticalMark2 + practicalMark2 + final2 )) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
+      `SELECT *,(theoreticalMark + practicalMark + finalMark + IFNULL(lift,0) ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) )) AS finalMark2,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0)) AS aFinalMark1 ,IF(final2 =0 ,0,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + final2 + IFNULL(lift,0))) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         result(null, res);
+      }
+   );
+};
+
+Mark.getByTwo = (sqlQuery, result) => {
+   sql.query(
+      `SELECT studentId , lessonId,coHeadId,(theoreticalMark + IFNULL(theoreticalMark2,0)) AS theoreticalMark,markDate,(practicalMark + IFNULL(practicalMark2,0) ) AS practicalMark,finalMark,final2,IFNULL(lift,0) As lift,status,status2,(theoreticalMark + practicalMark + finalMark + IFNULL(lift,0) + IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) ) As finalMark1 ,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) + IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) ) As finalMark2 , (IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0) ) As aFindMark ,  (IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0)+ final2 + IFNULL(lift,0) ) As aFinalMark2 ,(SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery} `,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -46,7 +91,7 @@ Mark.getAll = (sqlQuery, result) => {
 
 Mark.getLiftAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT *, (theoreticalMark + practicalMark + finalMark + lift ) As finalMark1 ,(theoreticalMark + practicalMark + final2 + lift ) As finalMark2 , (theoreticalMark2 + practicalMark2 + finalMark + lift ) As aFindMark ,  (theoreticalMark2 + practicalMark2 + final2 + lift ) As aFinalMark2 FROM marks WHERE (theoreticalMark + practicalMark + finalMark ) < 50 AND (theoreticalMark + practicalMark + final2 ) < 50 ${sqlQuery} ORDER BY finalMark1`,
+      `SELECT *, (theoreticalMark + practicalMark + finalMark + IFNULL(lift,0) ) As finalMark1 ,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) ) As finalMark2 , (IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0) ) As aFindMark ,  (IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + final2 + IFNULL(lift,0) ) As aFinalMark2 , (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE (theoreticalMark + practicalMark + finalMark ) < 50 AND (theoreticalMark + practicalMark + final2 ) < 50 ${sqlQuery} ORDER BY finalMark1`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -79,7 +124,8 @@ Mark.findById = (userId, result) => {
 
 Mark.updateById = (markData, result) => {
    sql.query(
-      `UPDATE marks SET studentId = ${markData.studentId} , lessonId = ${markData.lessonId} , coHeadId = ${markData.coHeadId} , theoreticalMark = ${markData.theoreticalMark} , practicalMark = ${markData.practicalMark} , theoreticalMark2 = ${markData.theoreticalMark2} , practicalMark2 = ${markData.practicalMark2} ,finalMark = ${markData.finalMark} , final2 = ${markData.final2} ,status = ${markData.status}, status2 = ${markData.status2}  WHERE idMark = ${markData.idMark}`,
+      `UPDATE marks SET ? WHERE idMark = ${markData.idMark}`,
+      markData,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

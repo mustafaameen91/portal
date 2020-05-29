@@ -1,4 +1,5 @@
 const MasterHistory = require("../models/history.models.js");
+const md5 = require("md5");
 
 exports.create = (req, res) => {
    if (!req.body) {
@@ -8,14 +9,15 @@ exports.create = (req, res) => {
    }
 
    const masterHistory = new MasterHistory({
-      masterKey: req.body.masterKey,
-      students: req.body.students,
-      lessons: req.body.lessons,
-      marks: req.body.marks,
+      masterKey: md5(req.body.masterKey),
+      students: JSON.stringify(req.body.students),
+      lessons: JSON.stringify(req.body.lessons),
+      marks: JSON.stringify(req.body.marks),
       sectionId: req.body.sectionId,
       class: req.body.class,
       level: req.body.level,
       year: req.body.year,
+      leveltype: req.body.leveltype,
    });
 
    MasterHistory.create(masterHistory, (err, data) => {
@@ -48,6 +50,24 @@ exports.findOne = (req, res) => {
             res.status(500).send({
                message:
                   "Error retrieving masterHistory with id " + req.params.id,
+            });
+         }
+      } else res.send(data);
+   });
+};
+
+exports.findMasterKey = (req, res) => {
+   MasterHistory.findByMasterKey(req.query.masterKey, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found masterHistory with masterKey ${req.query.masterKey}.`,
+            });
+         } else {
+            res.status(500).send({
+               message:
+                  "Error retrieving masterHistory with masterKey " +
+                  req.query.masterKey,
             });
          }
       } else res.send(data);

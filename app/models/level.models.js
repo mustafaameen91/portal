@@ -33,6 +33,41 @@ Level.getAll = (sqlQuery, result) => {
    });
 };
 
+Level.foundLevel = (levelData, result) => {
+   sql.query(
+      `SELECT * FROM level WHERE sectionId = ${levelData.sectionId} AND level = ${levelData.level} AND year = '${levelData.year}'`,
+      (err, res) => {
+         if (err) {
+            result(err, null);
+            return;
+         }
+         if (res.length) {
+            console.log("found level: ", res[0]);
+            sql.query(
+               "UPDATE level SET ? WHERE id = ?",
+               [levelData, res[0].id],
+               (err, res) => {
+                  if (err) {
+                     console.log("error: ", err);
+                     result(null, err);
+                     return;
+                  }
+
+                  if (res.affectedRows == 0) {
+                     result({ kind: "not_found" }, null);
+                     return;
+                  }
+
+                  result(null, [levelData]);
+               }
+            );
+         } else {
+            result(null, []);
+         }
+      }
+   );
+};
+
 Level.findById = (levelId, result) => {
    sql.query(`SELECT * FROM level WHERE id = ${levelId}`, (err, res) => {
       if (err) {

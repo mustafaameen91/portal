@@ -7,6 +7,8 @@ module.exports = (app) => {
 
    app.get("/api/history/:id", MasterHistory.findOne);
 
+   app.get("/api/historyMaster", MasterHistory.findMasterKey);
+
    app.post("/api/history/:id", MasterHistory.update);
 
    app.delete("/api/history/:id", MasterHistory.delete);

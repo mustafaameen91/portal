@@ -94,6 +94,132 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.findReport = (req, res) => {
+   let studentId = req.query.studentId;
+   let sectionId = req.query.sectionId;
+   let lessonsId = req.query.lessonsId;
+   let level = req.query.level;
+   let className = req.query.class;
+   let sex = req.query.sex;
+   let type = req.query.type;
+   let final = req.query.final;
+   let examType = req.query.examType;
+
+   let finalType = "finalMark";
+   let exam = "0";
+
+   let sqlQuery = "";
+
+   if (studentId) {
+      sqlQuery += `AND studentId = '${studentId}' `;
+   }
+   if (level) {
+      sqlQuery += `AND level = '${level}' `;
+   }
+   if (className) {
+      sqlQuery += `AND class = '${className}' `;
+   }
+   if (sex) {
+      sqlQuery += `AND sex = '${sex}' `;
+   }
+   if (type) {
+      sqlQuery += `AND type = '${type}' `;
+   }
+   if (sectionId) {
+      sqlQuery += `AND sectionid = '${sectionId}' `;
+   }
+   if (final == 2) {
+      finalType = "final2";
+   }
+
+   if (examType == 2) {
+      exam = " IFNULL(practicalMark2,0) + IFNULL(theoreticalMark2,0) ";
+   }
+
+   if (lessonsId) {
+      sqlQuery += `AND lessonId IN (${lessonsId}) `;
+   }
+
+   Marks.getReport(sqlQuery, exam, finalType, (err, data) => {
+      if (err)
+         res.status(500).send({
+            message:
+               err.message || "Some error occurred while retrieving lesson.",
+         });
+      else res.send(data);
+   });
+};
+
+exports.findStudentFail = (req, res) => {
+   let studentId = req.query.studentId;
+   let final = req.query.final;
+   let type = req.query.type;
+
+   let finalType = "finalMark";
+   let exam = "0";
+
+   if (final == 2) {
+      finalType = "final2";
+   }
+
+   if (type == 2) {
+      exam = " IFNULL(practicalMark2,0) + IFNULL(theoreticalMark2,0) ";
+   }
+
+   Marks.getStudentFail(exam, finalType, studentId, (err, data) => {
+      if (err)
+         res.status(500).send({
+            message:
+               err.message || "Some error occurred while retrieving lesson.",
+         });
+      else res.send(data);
+   });
+};
+
+exports.getNewMarks = (req, res) => {
+   let studentId = req.query.studentId;
+   let lessonId = req.query.lessonId;
+   let lessonsId = req.query.lessonsId;
+   let status = req.query.status;
+   let levelType = req.query.leveltype;
+
+   console.log(levelType);
+
+   let sqlQuery = "";
+
+   if (studentId) {
+      sqlQuery += `AND studentId = '${studentId}' `;
+   }
+   if (lessonId) {
+      sqlQuery += `AND lessonId = '${lessonId}' `;
+   }
+   if (lessonsId) {
+      sqlQuery += `AND lessonId IN (${lessonsId}) `;
+   }
+   if (status) {
+      sqlQuery += `AND status = '${status}' `;
+   }
+   if (levelType == 1) {
+      Marks.getByTwo(sqlQuery, (err, data) => {
+         if (err) {
+            res.status(500).send({
+               massage: "error retrieving marks data",
+            });
+         } else res.send(data);
+      });
+   } else if (levelType == 2) {
+      Marks.getAll(sqlQuery, (err, data) => {
+         if (err) {
+            res.status(500).send({
+               message: "err retrieving marks data",
+            });
+         } else res.send(data);
+      });
+   } else {
+      res.status(500).send({ message: "please send the level type" });
+   }
+};
+
 exports.findLiftDegree = (req, res) => {
    let studentId = req.query.studentId;
    let lessonsId = req.query.lessonsId;
