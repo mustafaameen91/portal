@@ -31,7 +31,7 @@ Mark.create = (newMark, result) => {
 
 Mark.getReport = (sqlQuery, finalType, exam, result) => {
    sql.query(
-      `SELECT marks.idMark, marks.studentId,marks.lessonId ,marks.coHeadId,marks.theoreticalMark,marks.markDate,marks.practicalMark,marks.finalMark,marks.final2,marks.lift,marks.status,marks.status2,marks.practicalMark2,marks.theoreticalMark2, student.id , student.name,student.sectionid,student.level,student.class,student.sex,student.type ,COUNT(*) AS totalFail, SUM(theoreticalMark + practicalMark + ${finalType} +  ${exam}) / COUNT(studentId) AS average FROM marks JOIN student WHERE marks.studentId=student.id ${sqlQuery} GROUP BY studentId ORDER BY SUM(theoreticalMark + practicalMark + finalMark) / COUNT(studentId) DESC`,
+      `SELECT  marks.studentId,marks.lessonId ,marks.coHeadId,marks.theoreticalMark,marks.markDate,marks.practicalMark,marks.finalMark,marks.final2,marks.lift,marks.status,marks.status2,marks.practicalMark2,marks.theoreticalMark2, student.id , student.name,student.sectionid,student.level,student.class,student.sex,student.type ,COUNT(*) AS totalFail, SUM(theoreticalMark + practicalMark + ${finalType} +  ${exam}) / COUNT(studentId) AS average FROM marks JOIN student WHERE marks.studentId=student.id ${sqlQuery} GROUP BY studentId ORDER BY SUM(theoreticalMark + practicalMark + finalMark) / COUNT(studentId) DESC`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
