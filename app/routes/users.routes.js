@@ -7,6 +7,8 @@ module.exports = (app) => {
 
    app.get("/api/users", Users.findAll);
 
+   app.get("/api/getByQuery", Users.findQuery);
+
    app.get("/api/user/:id", Users.findOne);
 
    app.put("/api/user/:id", Users.update);

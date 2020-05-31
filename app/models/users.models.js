@@ -34,6 +34,19 @@ Users.getAll = (result) => {
    });
 };
 
+Users.getQuery = (sqlQuery, result) => {
+   sql.query(`${sqlQuery}`, (err, res) => {
+      if (err) {
+         console.log("error: ", err);
+         result(null, err);
+         return;
+      }
+
+      console.log("find: ", res);
+      result(null, res);
+   });
+};
+
 Users.findById = (userId, result) => {
    sql.query(`SELECT * FROM user WHERE id = ${userId}`, (err, res) => {
       if (err) {

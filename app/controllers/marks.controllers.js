@@ -6,6 +6,7 @@ exports.create = (req, res) => {
          message: "Content can not be empty!",
       });
    }
+
    const marks = new Marks({
       studentId: req.body.studentId,
       lessonId: req.body.lessonId,
@@ -128,8 +129,14 @@ exports.findReport = (req, res) => {
    if (sectionId) {
       sqlQuery += `AND sectionid = '${sectionId}' `;
    }
+
    if (final == 2) {
-      finalType = "final2";
+      finalType =
+         "IF((theoreticalMark + practicalMark + finalMark) > 50 , finalMark , final2)";
+   }
+
+   if (final == 1) {
+      sqlQuery += `AND final2 = 0 `;
    }
 
    if (examType == 2) {

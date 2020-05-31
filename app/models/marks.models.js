@@ -30,18 +30,17 @@ Mark.create = (newMark, result) => {
 };
 
 Mark.getReport = (sqlQuery, finalType, exam, result) => {
-   sql.query(
-      `SELECT  marks.studentId,marks.lessonId ,marks.coHeadId,marks.theoreticalMark,marks.markDate,marks.practicalMark,marks.finalMark,marks.final2,marks.lift,marks.status,marks.status2,marks.practicalMark2,marks.theoreticalMark2, student.id , student.name,student.sectionid,student.level,student.class,student.sex,student.type ,COUNT(*) AS totalFail, SUM(theoreticalMark + practicalMark + ${finalType} +  ${exam}) / COUNT(studentId) AS average FROM marks JOIN student WHERE marks.studentId=student.id ${sqlQuery} GROUP BY studentId ORDER BY SUM(theoreticalMark + practicalMark + finalMark) / COUNT(studentId) DESC`,
-      (err, res) => {
-         if (err) {
-            console.log("error: ", err);
-            result(null, err);
-            return;
-         }
+   let getQuery = `SELECT  marks.studentId,marks.lessonId ,marks.coHeadId,marks.theoreticalMark,marks.markDate,marks.practicalMark,marks.finalMark,marks.final2,marks.lift,marks.status,marks.status2,marks.practicalMark2,marks.theoreticalMark2, student.id , student.name,student.sectionid,student.level,student.class,student.sex,student.type ,COUNT(*) AS totalLessons, SUM(theoreticalMark + practicalMark + ${finalType} +  ${exam}) / COUNT(studentId) AS average FROM marks JOIN student WHERE marks.studentId=student.id ${sqlQuery} GROUP BY studentId ORDER BY SUM(theoreticalMark + practicalMark + finalMark) / COUNT(studentId) DESC`;
 
-         result(null, res);
+   sql.query(getQuery, (err, res) => {
+      if (err) {
+         console.log("error: ", err);
+         result(null, err);
+         return;
       }
-   );
+
+      result(null, res);
+   });
 };
 
 Mark.getStudentFail = (type, final, studentId, result) => {
@@ -61,7 +60,7 @@ Mark.getStudentFail = (type, final, studentId, result) => {
 
 Mark.getAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT *,(theoreticalMark + practicalMark + finalMark + IFNULL(lift,0) ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) )) AS finalMark2,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0)) AS aFinalMark1 ,IF(final2 =0 ,0,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + final2 + IFNULL(lift,0))) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
+      `SELECT *,(IFNULL(theoreticalMark,0) + IFNULL(practicalMark,0) + finalMark + IFNULL(lift,0) ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) )) AS finalMark2,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0)) AS aFinalMark1 ,IF(final2 =0 ,0,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + final2 + IFNULL(lift,0))) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

@@ -36,6 +36,17 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.findQuery = (req, res) => {
+   let querySql = req.query.sqlQuery;
+   Users.getQuery(querySql, (err, data) => {
+      if (err)
+         res.status(500).send({
+            message: "Some error occurred while retrieving users.",
+         });
+      else res.send(data);
+   });
+};
+
 exports.findOne = (req, res) => {
    Users.findById(req.params.id, (err, data) => {
       if (err) {
