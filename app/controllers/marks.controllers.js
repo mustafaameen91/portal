@@ -95,6 +95,25 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.findMasterSheet = (req, res) => {
+   let infoData = {
+      sectionId: req.query.sectionId,
+      year: req.query.year,
+      class: req.query.class,
+      type: req.query.type,
+      level: req.query.level,
+   };
+
+   Marks.getMasterSheet(infoData, (err, data) => {
+      if (err)
+         res.status(500).send({
+            message:
+               err.message || "Some error occurred while retrieving marks.",
+         });
+      else res.send(data);
+   });
+};
+
 exports.findReport = (req, res) => {
    let studentId = req.query.studentId;
    let sectionId = req.query.sectionId;

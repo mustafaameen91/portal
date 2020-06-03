@@ -58,6 +58,27 @@ Mark.getStudentFail = (type, final, studentId, result) => {
    );
 };
 
+Mark.getMasterSheet = (infoData, result) => {
+   sql.query(
+      `SELECT *,IF((SELECT type FROM level WHERE level.id = (SELECT level FROM lesson WHERE lesson.id = marks.lessonId)) = 1,1,2) As levelType,
+      @final_mark1:=IF((SELECT type FROM level WHERE level.id = (SELECT level FROM lesson WHERE lesson.id = marks.lessonId)) = 1,(IFNULL(marks.theoreticalMark ,0) + IFNULL(marks.practicalMark,0) + IFNULL(marks.theoreticalMark2,0) + IFNULL(marks.practicalMark2, 0) + IFNULL(marks.finalMark,0) + IFNULL(marks.lift,0)),
+      (IFNULL(marks.theoreticalMark ,0) + IFNULL(marks.practicalMark,0) + IFNULL(marks.finalMark,0) + IFNULL(marks.lift,0))) As final_mark1,
+      @final_mark2:=IF(@final_mark1 < 50,IF((SELECT type FROM level WHERE level.id = (SELECT level FROM lesson WHERE lesson.id = marks.lessonId)) = 1,(IFNULL(marks.theoreticalMark ,0) + IFNULL(marks.practicalMark,0) + IFNULL(marks.theoreticalMark2,0) + IFNULL(marks.practicalMark2, 0) + IFNULL(marks.final2,0) + IFNULL(marks.lift,0)),
+      (IFNULL(marks.theoreticalMark ,0) + IFNULL(marks.practicalMark,0) + IFNULL(marks.final2,0) + IFNULL(marks.lift,0))),0) As final_mark2,(SELECT name FROM student WHERE id = marks.studentId) As studentName,(SELECT sex FROM student WHERE id = marks.studentId) As studentSex,@sectionId:=(SELECT sectionid FROM student WHERE id = marks.studentId) As sectionId,@studentType:=(SELECT type FROM student WHERE id = marks.studentId) As studentType,@level:=(SELECT level FROM student WHERE id = marks.studentId) As level,@class:=(SELECT class FROM student WHERE id = marks.studentId) As class,(SELECT name FROM lesson WHERE lesson.id = marks.lessonId) As lessonName ,@year:=(SELECT year FROM lesson WHERE lesson.id = marks.lessonId) As year ,
+      IF(@final_mark2 > 49 AND @final_mark2 <= 60, 50, IF (@final_mark2 >= 60, (@final_mark2 - 10) , 0)) As final_mark_2_minus_10
+      FROM marks HAVING year = '${infoData.year}' AND sectionId = ${infoData.sectionId} AND level = ${infoData.level} AND class = '${infoData.class}' AND studentType = '${infoData.type}'`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         result(null, res);
+      }
+   );
+};
+
 Mark.getAll = (sqlQuery, result) => {
    sql.query(
       `SELECT *,(IFNULL(theoreticalMark,0) + IFNULL(practicalMark,0) + finalMark + IFNULL(lift,0) ) AS finalMark1,IF(final2 =0 ,0,(theoreticalMark + practicalMark + final2 + IFNULL(lift,0) )) AS finalMark2,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + finalMark + IFNULL(lift,0)) AS aFinalMark1 ,IF(final2 =0 ,0,(IFNULL(theoreticalMark2,0) + IFNULL(practicalMark2,0) + final2 + IFNULL(lift,0))) AS aFinalMark2, (SELECT name FROM student WHERE id = marks.studentId) AS studentName , (SELECT name FROM lesson WHERE id = marks.lessonId) AS lessonName FROM marks WHERE 1=1 ${sqlQuery}`,

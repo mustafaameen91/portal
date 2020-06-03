@@ -9,6 +9,8 @@ module.exports = (app) => {
 
    app.get("/api/marks", Marks.findAll);
 
+   app.get("/api/masterSheet", Marks.findMasterSheet);
+
    app.get("/api/marksReport", Marks.findReport);
 
    app.get("/api/studentFail", Marks.findStudentFail);
