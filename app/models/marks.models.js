@@ -14,6 +14,12 @@ const Mark = function (mark) {
    this.status2 = mark.status2;
    this.practicalMark2 = mark.practicalMark2;
    this.theoreticalMark2 = mark.theoreticalMark2;
+   this.practicalFinal = mark.practicalFinal;
+   this.practicalFinal2 = mark.practicalFinal2;
+   this.yearWorkT = mark.yearWorkT;
+   this.yearWorkP = mark.yearWorkP;
+   this.practicalStatus = mark.practicalStatus;
+   this.theoreticalStatus = mark.theoreticalStatus;
 };
 
 Mark.create = (newMark, result) => {

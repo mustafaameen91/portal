@@ -20,6 +20,12 @@ exports.create = (req, res) => {
       status2: req.body.status2,
       theoreticalMark2: req.body.theoreticalMark2,
       practicalMark2: req.body.practicalMark2,
+      practicalFinal: req.body.practicalFinal,
+      practicalFinal2: req.body.practicalFinal2,
+      yearWorkT: req.body.yearWorkT,
+      yearWorkP: req.body.yearWorkP,
+      practicalStatus: req.body.practicalStatus,
+      theoreticalStatus: req.body.theoreticalStatus,
    });
 
    if (req.body.id) {
@@ -37,6 +43,12 @@ exports.create = (req, res) => {
          status2: req.body.status2,
          theoreticalMark2: req.body.theoreticalMark2,
          practicalMark2: req.body.practicalMark2,
+         practicalFinal: req.body.practicalFinal,
+         practicalFinal2: req.body.practicalFinal2,
+         yearWorkT: req.body.yearWorkT,
+         yearWorkP: req.body.yearWorkP,
+         practicalStatus: req.body.practicalStatus,
+         theoreticalStatus: req.body.theoreticalStatus,
       };
       Marks.updateById(markData, (err, data) => {
          if (err) {

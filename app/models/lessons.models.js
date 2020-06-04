@@ -17,6 +17,9 @@ const Lesson = function (lesson) {
    this.thHoure = lesson.thHoure;
    this.prHoure = lesson.prHoure;
    this.course = lesson.course;
+   this.practicalFinal = lesson.practicalFinal;
+   this.yearWorkT = lesson.yearWorkT;
+   this.yearWorkP = lesson.yearWorkP;
 };
 
 Lesson.create = (newLesson, result) => {

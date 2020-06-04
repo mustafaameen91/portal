@@ -24,6 +24,9 @@ exports.create = (req, res) => {
       thHoure: req.body.thHoure,
       prHoure: req.body.prHoure,
       course: req.body.course,
+      practicalFinal: req.body.practicalFinal,
+      yearWorkT: req.body.yearWorkT,
+      yearWorkP: req.body.yearWorkP,
    });
 
    Lesson.create(lesson, (err, data) => {
@@ -98,19 +101,38 @@ exports.update = (req, res) => {
       });
    }
 
-   Lesson.updateById(req.params.id, new Lesson(req.body), (err, data) => {
-      if (err) {
-         if (err.kind === "not_found") {
-            res.status(404).send({
-               message: `Not found lesson with id ${req.params.id}.`,
-            });
-         } else {
-            res.status(500).send({
-               message: "Error updating lesson with id " + req.params.id,
-            });
-         }
-      } else res.send(data);
-   });
+   if (req.body.teacherid) {
+      Lesson.updateById(req.params.id, new Lesson(req.body), (err, data) => {
+         if (err) {
+            if (err.kind === "not_found") {
+               res.status(404).send({
+                  message: `Not found lesson with id ${req.params.id}.`,
+               });
+            } else {
+               res.status(500).send({
+                  message: "Error updating lesson with id " + req.params.id,
+               });
+            }
+         } else res.send(data);
+      });
+   } else {
+      let lesson = new Lesson(req.body);
+      lesson.teacherid = 0;
+
+      Lesson.updateById(req.params.id, lesson, (err, data) => {
+         if (err) {
+            if (err.kind === "not_found") {
+               res.status(404).send({
+                  message: `Not found lesson with id ${req.params.id}.`,
+               });
+            } else {
+               res.status(500).send({
+                  message: "Error updating lesson with id " + req.params.id,
+               });
+            }
+         } else res.send(data);
+      });
+   }
 };
 
 exports.delete = (req, res) => {
