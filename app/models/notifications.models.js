@@ -4,6 +4,8 @@ const Notifications = function (notification) {
    this.body = notification.body;
    this.userId = notification.userId;
    this.date = notification.date;
+   this.title = notification.title;
+   this.roleId = notification.roleId;
 };
 
 Notifications.create = (newNotification, result) => {
@@ -23,83 +25,105 @@ Notifications.create = (newNotification, result) => {
 };
 
 Notifications.getAll = (result) => {
-   sql.query("SELECT * FROM user", (err, res) => {
+   sql.query("SELECT * FROM notifications", (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(null, err);
          return;
       }
 
-      console.log("users: ", res);
+      console.log("notifications: ", res);
       result(null, res);
    });
 };
 
-Notifications.getQuery = (sqlQuery, result) => {
-   sql.query(`${sqlQuery}`, (err, res) => {
-      if (err) {
-         console.log("error: ", err);
-         result(null, err);
-         return;
-      }
+Notifications.findById = (notificationId, result) => {
+   sql.query(
+      `SELECT * FROM notifications WHERE id = ${notificationId}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+         }
 
-      console.log("find: ", res);
-      result(null, res);
-   });
-};
+         if (res.length) {
+            console.log("found notification: ", res[0]);
+            result(null, res[0]);
+            return;
+         }
 
-Notifications.findById = (userId, result) => {
-   sql.query(`SELECT * FROM user WHERE id = ${userId}`, (err, res) => {
-      if (err) {
-         console.log("error: ", err);
-         result(err, null);
-         return;
-      }
-
-      if (res.length) {
-         console.log("found user: ", res[0]);
-         result(null, res[0]);
-         return;
-      }
-
-      result({ kind: "not_found" }, null);
-   });
-};
-
-Notifications.updateById = (id, user, result) => {
-   sql.query("UPDATE user SET ? WHERE id = ?", [user, id], (err, res) => {
-      if (err) {
-         console.log("error: ", err);
-         result(null, err);
-         return;
-      }
-
-      if (res.affectedRows == 0) {
          result({ kind: "not_found" }, null);
-         return;
       }
-
-      console.log("updated user: ", { id: id, ...user });
-      result(null, { id: id, ...user });
-   });
+   );
 };
 
-Notifications.remove = (id, result) => {
-   sql.query("DELETE FROM user WHERE id = ?", id, (err, res) => {
-      if (err) {
-         console.log("error: ", err);
-         result(null, err);
-         return;
-      }
+Notifications.getByQuery = (sqlQuery, result) => {
+   sql.query(
+      `SELECT * FROM notifications WHERE 1=1 ${sqlQuery} `,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+         }
 
-      if (res.affectedRows == 0) {
+         if (res.length) {
+            console.log("found notifications: ", res);
+            result(null, res);
+            return;
+         }
+
          result({ kind: "not_found" }, null);
-         return;
       }
+   );
+};
 
-      console.log("deleted user with id: ", id);
-      result(null, res);
-   });
+Notifications.updateById = (notificationId, notification, result) => {
+   sql.query(
+      "UPDATE notifications SET ? WHERE id = ?",
+      [notification, notificationId],
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         if (res.affectedRows == 0) {
+            result({ kind: "not_found" }, null);
+            return;
+         }
+
+         console.log("updated notification: ", {
+            id: notificationId,
+            ...notification,
+         });
+         result(null, { id: notificationId, ...notification });
+      }
+   );
+};
+
+Notifications.remove = (notificationId, result) => {
+   sql.query(
+      "DELETE FROM notifications WHERE id = ?",
+      notificationId,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         if (res.affectedRows == 0) {
+            result({ kind: "not_found" }, null);
+            return;
+         }
+
+         console.log("deleted notification with id: ", notificationId);
+         result(null, res);
+      }
+   );
 };
 
 module.exports = Notifications;

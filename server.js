@@ -23,10 +23,8 @@ require("./app/routes/passMark.routes.js")(app);
 require("./app/routes/master.routes.js")(app);
 require("./app/routes/history.routes.js")(app);
 require("./app/routes/teacher.routes.js")(app);
-
-let s = "3";
-let m = s * 1;
-console.log(typeof m);
+require("./app/routes/notifications.routes.js")(app);
+require("./app/routes/sectionOrder.routes.js")(app);
 
 app.listen(8000, () => {
    console.log("Server is running on port 8000.");

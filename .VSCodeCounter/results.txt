@@ -1,24 +1,24 @@
-Date : 2020-06-03 12:49:41
+Date : 2020-06-06 13:18:30
 Directory : /Users/MAC2019/dijlaCollege/masterSheetApp/app
-Total : 31 files,  2634 codes, 3 comments, 434 blanks, all 3071 lines
+Total : 36 files,  3017 codes, 3 comments, 484 blanks, all 3504 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
-| JavaScript |         31 |      2,634 |          3 |        434 |      3,071 |
+| JavaScript |         36 |      3,017 |          3 |        484 |      3,504 |
 +------------+------------+------------+------------+------------+------------+
 
 Directories
 +------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                                     | files      | code       | comment    | blank      | total      |
 +------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                                        |         31 |      2,634 |          3 |        434 |      3,071 |
+| .                                                                                        |         36 |      3,017 |          3 |        484 |      3,504 |
 | config                                                                                   |          1 |          7 |          0 |          1 |          8 |
-| controllers                                                                              |          9 |      1,313 |          0 |        148 |      1,461 |
+| controllers                                                                              |         11 |      1,553 |          0 |        169 |      1,722 |
 | middleware                                                                               |          1 |         27 |          0 |          5 |         32 |
-| models                                                                                   |         11 |      1,204 |          3 |        215 |      1,422 |
-| routes                                                                                   |          9 |         83 |          0 |         65 |        148 |
+| models                                                                                   |         12 |      1,330 |          3 |        231 |      1,564 |
+| routes                                                                                   |         11 |        100 |          0 |         78 |        178 |
 +------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
@@ -27,34 +27,39 @@ Files
 +------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/config/db.config.js                       | JavaScript |          7 |          0 |          1 |          8 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/history.controllers.js        | JavaScript |        110 |          0 |         10 |        120 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/lesson.controllers.js         | JavaScript |        119 |          0 |         12 |        131 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/lesson.controllers.js         | JavaScript |        140 |          0 |         13 |        153 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/level.controllers.js          | JavaScript |        103 |          0 |         10 |        113 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/marks.controllers.js          | JavaScript |        300 |          0 |         38 |        338 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/marks.controllers.js          | JavaScript |        329 |          0 |         40 |        369 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/master.controllers.js         | JavaScript |         86 |          0 |         10 |         96 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/notifications.controllers.js  | JavaScript |         92 |          0 |          9 |        101 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/passMark.controllers.js       | JavaScript |        184 |          0 |         19 |        203 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/sectionOrder.controllers.js   | JavaScript |         98 |          0 |          9 |        107 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/student.controllers.js        | JavaScript |        186 |          0 |         24 |        210 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/teacher.controllers.js        | JavaScript |        117 |          0 |         14 |        131 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/controllers/users.controllers.js          | JavaScript |        108 |          0 |         11 |        119 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/middleware/paginatedResults.middleware.js | JavaScript |         27 |          0 |          5 |         32 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/db.js                              | JavaScript |         14 |          0 |          4 |         18 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/history.models.js                  | JavaScript |        116 |          0 |         19 |        135 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/lessons.models.js                  | JavaScript |         92 |          1 |         16 |        109 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/lessons.models.js                  | JavaScript |         95 |          1 |         16 |        112 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/level.models.js                    | JavaScript |        107 |          0 |         19 |        126 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/marks.models.js                    | JavaScript |        176 |          0 |         31 |        207 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/marks.models.js                    | JavaScript |        201 |          0 |         33 |        234 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/master.models.js                   | JavaScript |         94 |          0 |         17 |        111 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/notifications.models.js            | JavaScript |         88 |          0 |         18 |        106 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/notifications.models.js            | JavaScript |         93 |          0 |         16 |        109 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/passMark.models.js                 | JavaScript |        139 |          0 |         24 |        163 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/sectionOrder.models.js             | JavaScript |         93 |          0 |         16 |        109 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/student.models.js                  | JavaScript |        146 |          2 |         27 |        175 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/teacher.models.js                  | JavaScript |        107 |          0 |         19 |        126 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/models/users.models.js                    | JavaScript |        125 |          0 |         21 |        146 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/history.routes.js                  | JavaScript |          9 |          0 |          7 |         16 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/lesson.routes.js                   | JavaScript |          8 |          0 |          6 |         14 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/level.routes.js                    | JavaScript |          8 |          0 |          6 |         14 |
-| /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/marks.routes.js                    | JavaScript |         11 |          0 |          9 |         20 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/marks.routes.js                    | JavaScript |         12 |          0 |         10 |         22 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/master.routes.js                   | JavaScript |          8 |          0 |          6 |         14 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/notifications.routes.js            | JavaScript |          8 |          0 |          6 |         14 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/passMark.routes.js                 | JavaScript |          8 |          0 |          6 |         14 |
+| /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/sectionOrder.routes.js             | JavaScript |          8 |          0 |          6 |         14 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/student.routes.js                  | JavaScript |         12 |          0 |         10 |         22 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/teacher.routes.js                  | JavaScript |          9 |          0 |          7 |         16 |
 | /Users/MAC2019/dijlaCollege/masterSheetApp/app/routes/users.routes.js                    | JavaScript |         10 |          0 |          8 |         18 |
-| Total                                                                                    |            |      2,634 |          3 |        434 |      3,071 |
+| Total                                                                                    |            |      3,017 |          3 |        484 |      3,504 |
 +------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
