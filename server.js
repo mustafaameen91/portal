@@ -24,7 +24,10 @@ require("./app/routes/master.routes.js")(app);
 require("./app/routes/history.routes.js")(app);
 require("./app/routes/teacher.routes.js")(app);
 require("./app/routes/notifications.routes.js")(app);
-require("./app/routes/sectionOrder.routes.js")(app);
+require("./app/routes/masterType.routes.js")(app);
+require("./app/routes/newMasterSheet.routes.js")(app);
+require("./app/routes/studentMaster.routes.js")(app);
+require("./app/routes/markMaster.routes.js")(app);
 
 app.listen(8000, () => {
    console.log("Server is running on port 8000.");
