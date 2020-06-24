@@ -55,8 +55,6 @@ NewMasterSheet.getByFilter = (sqlQuery, result) => {
    );
 };
 
-//SELECT * , (SELECT masterType.typeName FROM masterType WHERE masterType.idMasterType = masterTypeId) As masterTypeName , (SELECT COUNT(*) FROM studentMaster WHERE studentMaster.masterId = newMasterSheet.idNewMaster) As totalStudents FROM newMasterSheet WHERE sectionId = ? AND level = ? AND class = ? AND year = ?
-
 NewMasterSheet.getQuery = (sqlQuery, result) => {
    sql.query(`${sqlQuery}`, (err, res) => {
       if (err) {
