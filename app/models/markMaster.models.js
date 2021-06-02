@@ -52,6 +52,86 @@ MarkMaster.checkDegree = (data , result) =>{
    })
 }
 
+
+// MarkMaster.getAllForAverages = (level, sectionId, result) => {
+//    sql.query(
+//       `SELECT SUM(markmaster.degree * lesson.credit)  average  , student.college_number FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level} GROUP BY student.college_number`,
+//       (err, res) => {
+//          if (err) {
+//             console.log("error: ", err);
+//             result(null, err);
+//             return;
+//          }
+//          console.log("mark Masters: ", res);
+//          result(null, res);
+//       }
+//    );
+// };
+
+MarkMaster.getStudentAllMarks = (level, sectionId, collegeNumber, result) => {
+   sql.query(
+      `SELECT student.college_number , markmaster.degree , markmaster.studentId ,lesson.course, markmaster.status ,markmaster.idMarkMaster, markmaster.examType, lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level}   AND student.college_number LIKE '%${collegeNumber}'`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+         console.log("mark Masters: ", res);
+         result(null, res);
+      }
+   );
+};
+
+MarkMaster.getAllForAverages = (level, sectionId, result) => {
+   sql.query(
+      `SELECT student.college_number , markmaster.degree , lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+         console.log("mark Masters: ", res);
+         result(null, res);
+      }
+   );
+
+};
+
+MarkMaster.getAllForAverageClass = (level, sectionId, className ,  result) => {
+   sql.query(
+      `SELECT student.college_number , markmaster.degree , markmaster.studentId , markmaster.status ,markmaster.idMarkMaster, markmaster.examType, lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level} AND newmastersheet.class = '${className}'`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+         console.log("mark Masters: ", res);
+         result(null, res);
+      }
+   );
+};
+
+
+MarkMaster.getStudentForAverage = (level, sectionId, collageNumber, result) => {
+   console.log(collageNumber);
+   sql.query(
+      `SELECT SUM(markmaster.degree * lesson.credit)  average  , student.college_number FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level} AND student.college_number LIKE '%${collageNumber}' GROUP BY student.college_number`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+         console.log("mark Masters: ", res);
+         result(null, res);
+      }
+   );
+};
+
+
 MarkMaster.getQuery = (sqlQuery, result) => {
    sql.query(`${sqlQuery}`, (err, res) => {
       if (err) {
@@ -63,6 +143,22 @@ MarkMaster.getQuery = (sqlQuery, result) => {
       console.log("find: ", res);
       result(null, res);
    });
+};
+
+MarkMaster.getSummerTraining = (studentId, result) => {
+   sql.query(
+      `SELECT * FROM markmaster JOIN lesson ON lesson.id = markmaster.lessonId WHERE lesson.name LIKE '%التدريب الصيفي%' AND markmaster.studentId = ${studentId}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         console.log("markMasters: ", res);
+         result(null, res);
+      }
+   );
 };
 
 MarkMaster.findById = (markMasterId, result) => {

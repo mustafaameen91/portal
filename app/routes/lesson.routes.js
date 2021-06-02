@@ -5,6 +5,10 @@ module.exports = (app) => {
 
    app.get("/api/lessons", lesson.findAll);
 
+   app.get("/api/findAverageLessons", lesson.findAverageLessons);
+
+   app.get("/api/sectionLessonsForDocument", lesson.findLessonsForSection);
+
    app.get("/api/lesson/:id", lesson.findOne);
 
    app.post("/api/lesson/:id", lesson.update);

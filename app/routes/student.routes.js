@@ -12,6 +12,8 @@ module.exports = (app) => {
    app.get("/api/studentCN", Student.findByCollageNumber);
 
    app.get("/api/studentInfo", Student.findStudentInfo);
+   
+   app.get("/api/v2/studentInfo", Student.findStudentInfoSignUp);
 
    app.get("/api/student/:id", Student.findOne);
 

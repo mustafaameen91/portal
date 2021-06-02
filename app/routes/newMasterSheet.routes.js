@@ -7,6 +7,8 @@ module.exports = (app) => {
 
    app.get("/api/v2/allMasterSheet/:id", NewMasterSheet.findOneByMasterId);
 
+   app.get("/api/v2/checkMasters/:studentId", NewMasterSheet.getStudentIdMaster);
+   
    app.get("/api/v2/allMasterSheet", NewMasterSheet.findByFilter);
 
    app.get("/api/v2/getMastersByTeacherId", NewMasterSheet.findByTeacherId);
@@ -15,7 +17,13 @@ module.exports = (app) => {
 
    app.get("/api/v2/masterSheet/:id", NewMasterSheet.findOne);
 
+   app.get("/api/v2/allMasterSheets/:id", NewMasterSheet.findAllByMasterId);
+
+   app.get("/api/v2/allMasterSheets", NewMasterSheet.findAllByMasterIdLast);
+
    app.post("/api/v2/masterSheet/:id", NewMasterSheet.update);
+
+   app.post("/api/v2/sendEmail", NewMasterSheet.sendMailToStudent);
 
    app.delete("/api/v2/masterSheet/:id", NewMasterSheet.delete);
 };

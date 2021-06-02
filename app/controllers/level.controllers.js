@@ -32,6 +32,23 @@ exports.create = (req, res) => {
    });
 };
 
+exports.findBySectionId = (req, res) => {
+   Level.getBySectionId(
+      req.query.level,
+      req.query.sectionId,
+      req.query.year,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message || "Some error occurred while retrieving level.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
+
 exports.findAll = (req, res) => {
    let year = req.query.year;
    let sectionId = req.query.sectionId;

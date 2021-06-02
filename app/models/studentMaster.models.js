@@ -135,7 +135,10 @@ StudentMaster.remove = (id, result) => {
             result({ kind: "not_found" }, null);
             return;
          }
-
+      
+         // sql.query("DELETE FROM markmaster WHERE studentId = ?" ,[id], (err,res) => {
+         //    console.log("ALL MARKS DELETED FOR Student ID: " + id)
+         // })
          console.log("deleted studentMaster with id: ", id);
          result(null, res);
       }

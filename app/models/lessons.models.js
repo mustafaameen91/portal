@@ -37,7 +37,7 @@ Lesson.create = (newLesson, result) => {
 
 Lesson.getAll = (sqlQuery, result) => {
    sql.query(
-      `SELECT * ,(SELECT name FROM section WHERE lesson.sectionid = section.id) AS sectionName FROM lesson WHERE 1=1 ${sqlQuery}`,
+      `SELECT * ,(SELECT name FROM section WHERE lesson.sectionid = section.id) AS sectionName FROM lesson WHERE 1=1 ${sqlQuery} ORDER BY enName = 'Project', credit = 0, credit`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -50,6 +50,41 @@ Lesson.getAll = (sqlQuery, result) => {
       }
    );
 };
+
+
+Lesson.getAverageLessons = (sectionId, level, result) => {
+   sql.query(
+      `SELECT  SUM(credit)  total FROM lesson WHERE sectionid = ${sectionId} AND year = '2019-2020' AND level = ${level}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         // console.log("lessons: ", res);
+         result(null, res);
+      }
+   );
+};
+
+
+Lesson.getLessonsForSection = (sectionId, level, result) => {
+   sql.query(
+      `SELECT * FROM lesson WHERE sectionid = ${sectionId} AND level = ${level}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         // console.log("lessons: ", res);
+         result(null, res);
+      }
+   );
+};
+
 
 Lesson.findById = (lessonId, result) => {
    sql.query(

@@ -1,4 +1,27 @@
 const NewMasterSheet = require("../models/newMasterSheet.models.js");
+const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
+
+
+let transporter = nodemailer.createTransport(
+   smtpTransport({
+      service: "gmail",
+      pool: true,
+      port: 465,
+      auth: {
+         user: "results3@duc.edu.iq",
+         pass: "Rr123123!@",
+      },
+   })
+);
+
+let mailOptions = {
+   from: "result@duc.edu.iq",
+   to: "",
+   subject: " نتيجة الامتحان النهائي",
+   text: "",
+};
+
 
 exports.create = (req, res) => {
    if (!req.body) {
@@ -42,6 +65,98 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.sendMailToStudent = (req, res) => {
+
+   console.log(req.body.body)
+
+   if(req.body.email.length > 0){
+
+   
+   mailOptions.to = req.body.email;
+
+
+
+   let messageBody = `
+         <html lang="ar" dir="rtl">
+            <head>
+               <style>
+                  body {
+                     text-align: center;
+                     direction: rtl !important;
+                  }
+
+                  .message-content {
+                     display: block !important;
+                     width: 100% !important;
+                     background-color: whitesmoke !important;
+                     border-radius: 10px !important;
+                     padding: 40px !important;
+                     text-align: center !important;
+                     direction: rtl !important;
+                  }
+                  h1 {
+                     font-size: 35px;
+                     color: black !important;
+                     text-align: center !important;
+                     display: block !important;
+                     direction: rtl !important;
+                  }
+
+                  p {
+                     font-size: 20px !important;
+                     color: black !important;
+                     text-align: center !important;
+                     display: block !important;
+                     direction: rtl !important;
+                  }
+
+                  a {
+                     display: block !important;
+                     width: 120px !important;
+                     text-align: center !important;
+                     padding: 10px 10px !important;
+                     background: #28DF47 !important;
+                     color: white !important;
+                     border-radius: 5px !important;
+                     text-decoration: none !important;
+                     margin: 0 auto !important;
+                  }
+                  table{
+                     width:80%
+                  }
+               </style>   
+            </head>
+            <body>   
+               <div class="message-content">
+               <img src="https://library.duc.edu.iq/wp-content/uploads/sites/22/2020/08/unnamed-file-1.png" width="300">
+               ${req.body.body}
+               </div>
+            </body>
+         </html>
+         `;
+
+   mailOptions.html = messageBody;
+
+   transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+         console.log(err);
+         console.log('error with sending email')
+         res.status(500).send({
+            message: "the information is not correct",
+         });
+         return;
+      } else {
+         res.status(200).send({
+            message: "the email has been send",
+         });
+      }
+   });
+
+}else{
+   console.log('email not found')
+}
+};
+
 
 exports.findByTeacherId = (req, res) => {
    NewMasterSheet.getByTeacherId(req.query.teacherId, (err, data) => {
@@ -64,9 +179,10 @@ exports.findByTeacherId = (req, res) => {
 exports.findByFilter = (req, res) => {
    let sectionId = req.query.sectionId;
    let level = req.query.level;
-   let sClass = req.query.sClass;
+   let sClass = req.query.class;
    let year = req.query.year;
    let course = req.query.course;
+   let studyType = req.query.studyType
 
    let sqlQuery = "";
 
@@ -78,6 +194,9 @@ exports.findByFilter = (req, res) => {
    }
    if (level) {
       sqlQuery += `AND level = '${level}' `;
+   }
+   if (studyType) {
+      sqlQuery += `AND studyType = '${studyType}' `;
    }
    if (year) {
       sqlQuery += `AND year = '${year}' `;
@@ -125,6 +244,97 @@ exports.findOne = (req, res) => {
    });
 };
 
+
+
+exports.getStudentIdMaster = (req , res) =>{
+   NewMasterSheet.findStudentId(req.params.studentId , (err , data) =>{
+      if(err){
+         res.send(err)
+      }else{
+         res.send(data)
+      }
+   })
+}
+
+exports.findAllByMasterIdLast = (req, res) => {
+   let lessonId = req.query.lessonId;
+
+   console.log(lessonId);
+
+   NewMasterSheet.findDegreeByMasterId(req.query.id, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found newMasterSheet with id ${req.query.id}.`,
+            });
+         } else {
+            res.status(500).send({
+               message:
+                  "Error retrieving newMasterSheet with id " + req.query.id,
+            });
+         }
+      } else {
+         let results = {
+            ...data.masterSheet,
+            students: data.students.map((student) => {
+               return {
+                  idStudentMaster: student.idStudentMaster,
+                  studentId: student.studentId,
+                  name: student.name,
+                  note: student.note,
+                  sex: student.sex,
+                  college_number: student.college_number,
+                  marks: data.marks.filter((mark) => {
+                     return (
+                        mark.studentId == student.studentId &&
+                        mark.lessonId == lessonId
+                     );
+                  }),
+               };
+            }),
+         };
+
+         res.send(results);
+      }
+   });
+};
+
+exports.findAllByMasterId = (req, res) => {
+   NewMasterSheet.findDegreeByMasterId(req.params.id, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found newMasterSheet with id ${req.params.id}.`,
+            });
+         } else {
+            res.status(500).send({
+               message:
+                  "Error retrieving newMasterSheet with id " + req.params.id,
+            });
+         }
+      } else {
+         let results = {
+            ...data.masterSheet,
+            students: data.students.map((student) => {
+               return {
+                  idStudentMaster: student.idStudentMaster,
+                  studentId: student.studentId,
+                  name: student.name,
+                  note: student.note,
+                  sex: student.sex,
+                  college_number: student.college_number,
+                  marks: data.marks.filter((mark) => {
+                     return mark.studentId == student.studentId;
+                  }),
+               };
+            }),
+         };
+
+         res.send(results);
+      }
+   });
+};
+
 exports.findOneByMasterId = (req, res) => {
    NewMasterSheet.findByMasterId(req.params.id, (err, data) => {
       if (err) {
@@ -147,6 +357,8 @@ exports.findOneByMasterId = (req, res) => {
                   studentId: student.studentId,
                   name: student.name,
                   note: student.note,
+                  email: student.email,
+                  sex: student.sex,
                   college_number: student.college_number,
                   marks: data.marks.filter((mark) => {
                      return mark.studentId == student.studentId;

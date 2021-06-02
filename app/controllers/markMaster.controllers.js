@@ -66,6 +66,105 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.findSummerTraining = (req, res) => {
+   MarkMaster.getSummerTraining(req.params.studentId, (err, data) => {
+      if (err)
+         res.status(500).send({
+            message:
+               err.message ||
+               "Some error occurred while retrieving MarkMaster.",
+         });
+      else res.send(data);
+   });
+};
+
+exports.findAllForAverage = (req, res) => {
+   MarkMaster.getAllForAverage(
+      req.query.level,
+      req.query.sectionId,
+
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message ||
+                  "Some error occurred while retrieving MarkMaster.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
+
+exports.findStudentAllMarks = (req, res) => {
+   MarkMaster.getStudentAllMarks(
+      req.query.level,
+      req.query.sectionId,
+      req.query.collegeNumber,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message ||
+                  "Some error occurred while retrieving MarkMaster.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
+exports.findAllForAverages = (req, res) => {
+   MarkMaster.getAllForAverages(
+      req.query.level,
+      req.query.sectionId,
+      
+      (err, data) => {
+         if (err){
+            res.status(500).send({
+               message:
+                  err.message ||
+                  "Some error occurred while retrieving MarkMaster.",
+                  error : err
+            });
+         }else res.send(data);
+      }
+   );
+};
+
+exports.findAllForAverageClass = (req, res) => {
+   MarkMaster.getAllForAverageClass(
+      req.query.level,
+      req.query.sectionId,
+      req.query.class,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message ||
+                  "Some error occurred while retrieving MarkMaster.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
+exports.findStudentForAverage = (req, res) => {
+   MarkMaster.getStudentForAverage(
+      req.query.level,
+      req.query.sectionId,
+      req.query.collageNumber,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message ||
+                  "Some error occurred while retrieving MarkMaster.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
 exports.findQuery = (req, res) => {
    let querySql = req.query.sqlQuery;
    MarkMaster.getQuery(querySql, (err, data) => {
@@ -91,6 +190,72 @@ exports.findOne = (req, res) => {
          }
       } else res.send(data);
    });
+};
+
+exports.createMultiDegree = (req, res) => {
+   let unParseData = req.body.marks;
+
+   let marks = JSON.parse(unParseData);
+
+   let errList = [];
+
+   marks.forEach((mark) => {
+      const markMaster = new MarkMaster({
+         studentId: mark.studentId,
+         lessonId: mark.lessonId,
+         masterId: mark.masterId,
+         markType: mark.markType,
+         degree: mark.degree,
+         examType: "unSetColumn",
+         status: mark.status,
+      });
+
+      MarkMaster.checkDegree(markMaster, (err, data) => {
+         if (err) {
+            MarkMaster.create(markMaster, (err, data) => {
+               if (err) {
+                  console.log({
+                     message:
+                        err.message ||
+                        "Some error occurred while creating the MarkMaster.",
+                  });
+                  errList.push(err);
+               } else console.log(data);
+            });
+         } else {
+            mark.examType = "unSetColumn";
+            MarkMaster.updateById(
+               mark.idMarkMaster,
+               new MarkMaster(mark),
+               (err, data) => {
+                  if (err) {
+                     if (err.kind === "not_found") {
+                        console.log({
+                           message: `Not found MarkMaster with id ${mark.idMarkMaster}.`,
+                        });
+                     } else {
+                        console.log({
+                           message:
+                              "Error updating MarkMaster with id " +
+                              mark.idMarkMaster,
+                        });
+                        errList.push(err);
+                     }
+                  } else console.log(data);
+               }
+            );
+         }
+      });
+   });
+
+   if (errList.length > 0) {
+      res.status(500).send({
+         message:
+            err.message || "Some error occurred while retrieving MarkMaster.",
+      });
+   } else {
+      res.send({ message: "complete upload data" });
+   }
 };
 
 exports.update = (req, res) => {

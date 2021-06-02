@@ -1,12 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 var cors = require("cors");
-const swaggerUi = require("swagger-ui-express");
+
 const app = express();
-
-const swaggerDocument = require("./swagger.json");
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -32,6 +28,7 @@ require("./app/routes/masterType.routes.js")(app);
 require("./app/routes/newMasterSheet.routes.js")(app);
 require("./app/routes/studentMaster.routes.js")(app);
 require("./app/routes/markMaster.routes.js")(app);
+require("./app/routes/section.routes.js")(app);
 
 app.listen(8000, () => {
    console.log("Server is running on port 8000.");

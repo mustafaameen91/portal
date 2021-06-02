@@ -33,6 +33,38 @@ Level.getAll = (sqlQuery, result) => {
    });
 };
 
+Level.getForDist = (result) => {
+   sql.query(
+      `SELECT * FROM level JOIN section ON section.id = level.sectionId`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         console.log("level: ", res);
+         result(null, res);
+      }
+   );
+};
+
+Level.getBySectionId = (level, sectionId, year, result) => {
+   sql.query(
+      `SELECT * FROM level WHERE sectionId = ${sectionId} AND level = ${level} AND year = '${year}'`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+         }
+
+         console.log("level: ", res[0]);
+         result(null, res[0]);
+      }
+   );
+};
+
 Level.foundLevel = (levelData, result) => {
    sql.query(
       `SELECT * FROM level WHERE sectionId = ${levelData.sectionId} AND level = ${levelData.level} AND year = '${levelData.year}'`,

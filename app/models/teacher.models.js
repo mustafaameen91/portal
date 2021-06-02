@@ -33,7 +33,7 @@ Teacher.create = (newTeacher, result) => {
 Teacher.getAll = (sqlQuery, result) => {
    console.log(sqlQuery);
    sql.query(
-      `SELECT * FROM teacher WHERE 1=1 ${sqlQuery} LIMIT 30`,
+      `SELECT * FROM teacher WHERE 1=1 ${sqlQuery} LIMIT 55`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -49,7 +49,7 @@ Teacher.getAll = (sqlQuery, result) => {
 
 Teacher.loginTeacher = (email, password, result) => {
    sql.query(
-      `SELECT * ,(SELECT val FROM \`system\` WHERE var = \'currentYear\') AS currentYear  FROM teacher WHERE email = '${email}' AND password = '${password}'`,
+      `SELECT * ,(SELECT val FROM \`system\` WHERE var = \'currentYear\') AS currentYear ,(SELECT name from section WHERE teacher.sectionId = section.id) AS sectionName  FROM teacher WHERE email = '${email}' AND password = '${password}'`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

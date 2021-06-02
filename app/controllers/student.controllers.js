@@ -130,6 +130,7 @@ exports.findStudentInfo = (req, res) => {
    let studentName = req.query.studentName;
    let level = req.query.level;
    let type = req.query.type;
+   let grdat = req.query.grdat;
    let manyStatus = req.query.manyStatus * 1;
 
    console.log(sectionId)
@@ -139,6 +140,10 @@ exports.findStudentInfo = (req, res) => {
    if (sex) {
       sqlQuery += `AND SEX = '${sex}' `;
    }
+   if (grdat) {
+      sqlQuery += `AND grdat = '${grdat}' `;
+   }
+
    if (sectionId) {
       sqlQuery += `AND sectionid = '${sectionId}' `;
    }
@@ -181,6 +186,95 @@ exports.findStudentInfo = (req, res) => {
       } else res.send(data);
    });
 };
+
+
+
+
+exports.findStudentInfoSignUp = (req, res) => {
+   const page = parseInt(req.query.page);
+   const limit = parseInt(req.query.limit);
+
+   const startIndex = (page - 1) * limit;
+   const endIndex = page * limit;
+
+   let sex = req.query.sex;
+   let sectionId = req.query.sectionId;
+   let status = req.query.status;
+   let className = req.query.className;
+   let studentName = req.query.studentName;
+   let level = req.query.level;
+   let type = req.query.type;
+   let name = req.query.name;
+   let manyStatus = req.query.manyStatus * 1;
+
+   // ADDED 5-12-2020 By Ahmad Faris
+   let enter_year = req.query.enterYear;
+   let grad_year = req.query.gradYear;
+
+   console.log(sectionId)
+
+   let sqlQuery = "";
+
+   if (sex) {
+      sqlQuery += `AND SEX = '${sex}' `;
+   }
+
+   if (enter_year) {
+      sqlQuery += `AND enter_year = '${enter_year}' `;
+   }
+
+   if (grad_year) {
+      sqlQuery += `AND grdat = '${grad_year}' `;
+   }
+
+   
+   if (name) {
+      sqlQuery += `AND name LIKE '%${name}%' `;
+   }
+
+   if (sectionId) {
+      sqlQuery += `AND sectionid = '${sectionId}' `;
+   }
+
+   if (manyStatus) {
+     
+      sqlQuery += `AND status IN ${status} `;
+   } else {
+      if (status) {
+         sqlQuery += `AND status = '${status}' `;
+      }
+   }
+
+
+
+   if (className) {
+      sqlQuery += `AND class = '${className}' `;
+   }
+   if (studentName) {
+      sqlQuery += `AND name LIKE '${studentName}%' `;
+   }
+   if (level) {
+      sqlQuery += `AND level = '${level}' `;
+   }
+   if (type) {
+      sqlQuery += `AND type = '${type}' `;
+   }
+
+   Student.getStudentInfo(startIndex, endIndex, sqlQuery, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found student `,
+            });
+         } else {
+            res.status(500).send({
+               message: "Error retrieving student",
+            });
+         }
+      } else res.send(data);
+   });
+};
+
 
 exports.update = (req, res) => {
    if (!req.body) {

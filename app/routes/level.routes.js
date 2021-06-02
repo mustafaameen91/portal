@@ -5,6 +5,8 @@ module.exports = (app) => {
 
    app.get("/api/levels", Level.findAll);
 
+   app.get("/api/sectionLevel", Level.findBySectionId);
+
    app.get("/api/level/:id", Level.findOne);
 
    app.put("/api/level/:id", Level.update);

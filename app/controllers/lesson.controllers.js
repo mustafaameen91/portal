@@ -78,6 +78,36 @@ exports.findAll = (req, res) => {
    });
 };
 
+exports.findAverageLessons = (req, res) => {
+   Lesson.getAverageLessons(
+      req.query.sectionId,
+      req.query.level,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message || "Some error occurred while retrieving lesson.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
+exports.findLessonsForSection = (req, res) => {
+   Lesson.getLessonsForSection(
+      req.query.sectionId,
+      req.query.level,
+      (err, data) => {
+         if (err)
+            res.status(500).send({
+               message:
+                  err.message || "Some error occurred while retrieving lesson.",
+            });
+         else res.send(data);
+      }
+   );
+};
+
 exports.findOne = (req, res) => {
    Lesson.findById(req.params.id, (err, data) => {
       if (err) {
