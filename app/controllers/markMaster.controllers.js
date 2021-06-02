@@ -17,15 +17,41 @@ exports.create = (req, res) => {
       status: req.body.status,
    });
 
-   MarkMaster.create(markMaster, (err, data) => {
-      if (err)
-         res.status(500).send({
-            message:
-               err.message ||
-               "Some error occurred while creating the MarkMaster.",
+
+   MarkMaster.checkDegree(markMaster , (err , data) =>{
+      console.log(markMaster)
+      if(err){
+         MarkMaster.create(markMaster, (err, data) => {
+            if (err)
+               res.status(500).send({
+                  message:
+                     err.message ||
+                     "Some error occurred while creating the MarkMaster.",
+               });
+            else res.send(data);
          });
-      else res.send(data);
-   });
+      }else{
+         MarkMaster.updateById(
+            data[0].idMarkMaster,
+            new MarkMaster(req.body),
+            (err, data) => {
+               if (err) {
+                  if (err.kind === "not_found") {
+                     res.status(404).send({
+                        message: `Not found MarkMaster with id ${data[0].idMarkMaster}.`,
+                     });
+                  } else {
+                     res.status(500).send({
+                        message: "Error updating MarkMaster with id " + data[0].idMarkMaster,
+                     });
+                  }
+               } else res.send(data);
+            }
+         );
+      }
+   })
+
+  
 };
 
 exports.findAll = (req, res) => {

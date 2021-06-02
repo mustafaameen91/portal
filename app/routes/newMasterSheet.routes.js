@@ -9,11 +9,13 @@ module.exports = (app) => {
 
    app.get("/api/v2/allMasterSheet", NewMasterSheet.findByFilter);
 
+   app.get("/api/v2/getMastersByTeacherId", NewMasterSheet.findByTeacherId);
+
    app.get("/api/v2/getByQuery", NewMasterSheet.findQuery);
 
    app.get("/api/v2/masterSheet/:id", NewMasterSheet.findOne);
 
-   app.put("/api/v2/masterSheet/:id", NewMasterSheet.update);
+   app.post("/api/v2/masterSheet/:id", NewMasterSheet.update);
 
    app.delete("/api/v2/masterSheet/:id", NewMasterSheet.delete);
 };

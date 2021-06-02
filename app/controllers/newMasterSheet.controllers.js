@@ -15,6 +15,8 @@ exports.create = (req, res) => {
       studyType: req.body.studyType,
       masterTypeId: req.body.masterTypeId,
       course: req.body.course,
+      note: "",
+      downgrade: 0
    });
 
    NewMasterSheet.create(newMasterSheet, (err, data) => {
@@ -37,6 +39,25 @@ exports.findAll = (req, res) => {
                "Some error occurred while retrieving newMasterSheet.",
          });
       else res.send(data);
+   });
+};
+
+
+exports.findByTeacherId = (req, res) => {
+   NewMasterSheet.getByTeacherId(req.query.teacherId, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found newMasterSheet with id ${req.params.teacherId}.`,
+            });
+         } else {
+            res.status(500).send({
+               message:
+                  "Error retrieving newMasterSheet with id " +
+                  req.params.teacherId,
+            });
+         }
+      } else res.send(data);
    });
 };
 
@@ -122,8 +143,10 @@ exports.findOneByMasterId = (req, res) => {
             masterSheet: data.masterSheet,
             students: data.students.map((student) => {
                return {
+                  idStudentMaster: student.idStudentMaster,
                   studentId: student.studentId,
                   name: student.name,
+                  note: student.note,
                   college_number: student.college_number,
                   marks: data.marks.filter((mark) => {
                      return mark.studentId == student.studentId;
@@ -143,7 +166,7 @@ exports.update = (req, res) => {
          message: "Content can not be empty!",
       });
    }
-
+   // console.log(req.body);
    NewMasterSheet.updateById(
       req.params.id,
       new NewMasterSheet(req.body),

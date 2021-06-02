@@ -39,6 +39,19 @@ MarkMaster.getAll = (result) => {
    });
 };
 
+
+MarkMaster.checkDegree = (data , result) =>{
+   sql.query(`SELECT * FROM markMaster Where studentId = ${data.studentId} AND lessonId = ${data.lessonId} AND markType = '${data.markType}' AND masterId = ${data.masterId}`, (err , row) =>{
+      if (row.length == 0) {
+         console.log("not found");
+         result('not found', null);
+         return;
+      }else{
+         result(null , row)
+      }
+   })
+}
+
 MarkMaster.getQuery = (sqlQuery, result) => {
    sql.query(`${sqlQuery}`, (err, res) => {
       if (err) {

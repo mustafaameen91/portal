@@ -130,6 +130,9 @@ exports.findStudentInfo = (req, res) => {
    let studentName = req.query.studentName;
    let level = req.query.level;
    let type = req.query.type;
+   let manyStatus = req.query.manyStatus * 1;
+
+   console.log(sectionId)
 
    let sqlQuery = "";
 
@@ -139,9 +142,18 @@ exports.findStudentInfo = (req, res) => {
    if (sectionId) {
       sqlQuery += `AND sectionid = '${sectionId}' `;
    }
-   if (status) {
-      sqlQuery += `AND status = '${status}' `;
+
+   if (manyStatus) {
+     
+      sqlQuery += `AND status IN ${status} `;
+   } else {
+      if (status) {
+         sqlQuery += `AND status = '${status}' `;
+      }
    }
+
+
+
    if (className) {
       sqlQuery += `AND class = '${className}' `;
    }

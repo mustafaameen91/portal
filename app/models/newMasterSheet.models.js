@@ -8,6 +8,8 @@ const NewMasterSheet = function (newMasterSheet) {
    this.studyType = newMasterSheet.studyType;
    this.masterTypeId = newMasterSheet.masterTypeId;
    this.course = newMasterSheet.course;
+   this.note = newMasterSheet.note;
+   this.downgrade = newMasterSheet.downgrade;
 };
 
 NewMasterSheet.create = (newMasterSheet, result) => {
@@ -38,6 +40,31 @@ NewMasterSheet.getAll = (result) => {
       result(null, res);
    });
 };
+
+
+NewMasterSheet.getByTeacherId = (teacherId, result) => {
+   sql.query(
+      `SELECT (lesson.id) AS lessonId , (lesson.name) AS lessonName , lesson.sectionid , lesson.teacherid , lesson.credit , lesson.required , lesson.mgroupid , lesson.prevlesson , lesson.year , lesson.theoretical , lesson.practical , lesson.final , lesson.level , lesson.enName , lesson.thHoure , lesson.prHoure , lesson.course , lesson.practicalFinal , lesson.yearWorkT , lesson.yearWorkP , newMasterSheet.idNewMaster , newMasterSheet.sectionId , newMasterSheet.level , newMasterSheet.class , newMasterSheet.year , newMasterSheet.studyType , newMasterSheet.date , newMasterSheet.masterTypeId , newMasterSheet.course , masterType.idMasterType , masterType.typeName , section.id , section.name FROM lesson JOIN newMasterSheet JOIN masterType JOIN section ON lesson.sectionid = newMasterSheet.sectionId AND lesson.year = newMasterSheet.year AND lesson.level = newMasterSheet.level AND lesson.sectionid = section.id AND newMasterSheet.masterTypeId = masterType.idMasterType AND teacherid = ${teacherId}`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+         }
+
+         if (res.length) {
+            console.log("found newMasterSheet: ", res);
+            result(null, res);
+            return;
+         }
+
+         result({ kind: "not_found" }, null);
+      }
+   );
+};
+
+
+
 
 NewMasterSheet.getByFilter = (sqlQuery, result) => {
    sql.query(
@@ -104,7 +131,7 @@ NewMasterSheet.findByMasterId = (idNewMaster, result) => {
 
          if (res.length) {
             sql.query(
-               `SELECT studentId , name , college_number FROM studentMaster JOIN student WHERE studentMaster.studentId = student.id AND masterId = ${res[0].idNewMaster}`,
+               `SELECT idStudentMaster ,studentId , name , college_number ,note FROM studentMaster JOIN student WHERE studentMaster.studentId = student.id AND masterId = ${res[0].idNewMaster}`,
                (err, res1) => {
                   if (err) {
                      console.log("error: ", err);
@@ -139,6 +166,7 @@ NewMasterSheet.findByMasterId = (idNewMaster, result) => {
 };
 
 NewMasterSheet.updateById = (idNewMaster, newMasterSheet, result) => {
+   console.log(newMasterSheet);
    sql.query(
       "UPDATE newMasterSheet SET ? WHERE idNewMaster = ?",
       [newMasterSheet, idNewMaster],
