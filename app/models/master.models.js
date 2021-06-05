@@ -6,7 +6,7 @@ const MasterSheet = function (masterSheet) {
 };
 
 MasterSheet.create = (newMaster, result) => {
-   sql.query("INSERT INTO masterSheet SET ?", newMaster, (err, res) => {
+   sql.query("INSERT INTO mastersheet SET ?", newMaster, (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(err, null);
@@ -19,7 +19,7 @@ MasterSheet.create = (newMaster, result) => {
 };
 
 MasterSheet.getAll = (result) => {
-   sql.query("SELECT * FROM masterSheet", (err, res) => {
+   sql.query("SELECT * FROM mastersheet", (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(null, err);
@@ -32,7 +32,7 @@ MasterSheet.getAll = (result) => {
 
 MasterSheet.checkKey = (masterKey, result) => {
    sql.query(
-      `SELECT * FROM masterSheet WHERE masterKey = '${masterKey}'`,
+      `SELECT * FROM mastersheet WHERE masterKey = '${masterKey}'`,
       (err, res) => {
          if (err) {
             result(err, null);
@@ -45,7 +45,7 @@ MasterSheet.checkKey = (masterKey, result) => {
 
 MasterSheet.findById = (idMaster, result) => {
    sql.query(
-      `SELECT * FROM masterSheet WHERE idMaster = ${idMaster}`,
+      `SELECT * FROM mastersheet WHERE idMaster = ${idMaster}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -66,7 +66,7 @@ MasterSheet.findById = (idMaster, result) => {
 
 MasterSheet.updateById = (idMaster, note, result) => {
    sql.query(
-      `UPDATE masterSheet SET note = '${note}' WHERE idMaster = ${idMaster}`,
+      `UPDATE mastersheet SET note = '${note}' WHERE idMaster = ${idMaster}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -87,7 +87,7 @@ MasterSheet.updateById = (idMaster, note, result) => {
 
 MasterSheet.remove = (idMaster, result) => {
    sql.query(
-      "DELETE FROM masterSheet WHERE idMaster = ?",
+      "DELETE FROM mastersheet WHERE idMaster = ?",
       idMaster,
       (err, res) => {
          if (err) {

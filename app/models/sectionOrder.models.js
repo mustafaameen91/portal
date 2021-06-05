@@ -12,7 +12,7 @@ const SectionOrder = function (sectionOrder) {
 };
 
 SectionOrder.create = (newSectionOrder, result) => {
-   sql.query("INSERT INTO sectionOrder SET ?", newSectionOrder, (err, res) => {
+   sql.query("INSERT INTO sectionorder SET ?", newSectionOrder, (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(err, null);
@@ -28,7 +28,7 @@ SectionOrder.create = (newSectionOrder, result) => {
 };
 
 SectionOrder.getAll = (result) => {
-   sql.query("SELECT * FROM sectionOrder", (err, res) => {
+   sql.query("SELECT * FROM sectionorder", (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(null, err);
@@ -42,7 +42,7 @@ SectionOrder.getAll = (result) => {
 
 SectionOrder.findById = (sectionOrderId, result) => {
    sql.query(
-      `SELECT * FROM sectionOrder WHERE id = ${sectionOrderId}`,
+      `SELECT * FROM sectionorder WHERE id = ${sectionOrderId}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -63,7 +63,7 @@ SectionOrder.findById = (sectionOrderId, result) => {
 
 SectionOrder.getByQuery = (sqlQuery, result) => {
    sql.query(
-      `SELECT * FROM sectionOrder WHERE 1=1 ${sqlQuery} `,
+      `SELECT * FROM sectionorder WHERE 1=1 ${sqlQuery} `,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -84,7 +84,7 @@ SectionOrder.getByQuery = (sqlQuery, result) => {
 
 SectionOrder.updateById = (sectionOrderId, sectionOrder, result) => {
    sql.query(
-      "UPDATE sectionOrder SET ? WHERE id = ?",
+      "UPDATE sectionorder SET ? WHERE id = ?",
       [sectionOrder, sectionOrderId],
       (err, res) => {
          if (err) {
@@ -106,7 +106,7 @@ SectionOrder.updateById = (sectionOrderId, sectionOrder, result) => {
 
 SectionOrder.remove = (sectionOrderId, result) => {
    sql.query(
-      "DELETE FROM sectionOrder WHERE id = ?",
+      "DELETE FROM sectionorder WHERE id = ?",
       sectionOrderId,
       (err, res) => {
          if (err) {

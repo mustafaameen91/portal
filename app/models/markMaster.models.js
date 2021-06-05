@@ -11,7 +11,7 @@ const MarkMaster = function (markMaster) {
 };
 
 MarkMaster.create = (newMarkMaster, result) => {
-   sql.query("INSERT INTO markMaster SET ?", newMarkMaster, (err, res) => {
+   sql.query("INSERT INTO markmaster SET ?", newMarkMaster, (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(err, null);
@@ -27,7 +27,7 @@ MarkMaster.create = (newMarkMaster, result) => {
 };
 
 MarkMaster.getAll = (result) => {
-   sql.query("SELECT * FROM markMaster", (err, res) => {
+   sql.query("SELECT * FROM markmaster", (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(null, err);
@@ -39,19 +39,20 @@ MarkMaster.getAll = (result) => {
    });
 };
 
-
-MarkMaster.checkDegree = (data , result) =>{
-   sql.query(`SELECT * FROM markMaster Where studentId = ${data.studentId} AND lessonId = ${data.lessonId} AND markType = '${data.markType}' AND masterId = ${data.masterId}`, (err , row) =>{
-      if (row.length == 0) {
-         console.log("not found");
-         result('not found', null);
-         return;
-      }else{
-         result(null , row)
+MarkMaster.checkDegree = (data, result) => {
+   sql.query(
+      `SELECT * FROM markmaster Where studentId = ${data.studentId} AND lessonId = ${data.lessonId} AND markType = '${data.markType}' AND masterId = ${data.masterId}`,
+      (err, row) => {
+         if (row.length == 0) {
+            console.log("not found");
+            result("not found", null);
+            return;
+         } else {
+            result(null, row);
+         }
       }
-   })
-}
-
+   );
+};
 
 // MarkMaster.getAllForAverages = (level, sectionId, result) => {
 //    sql.query(
@@ -96,10 +97,9 @@ MarkMaster.getAllForAverages = (level, sectionId, result) => {
          result(null, res);
       }
    );
-
 };
 
-MarkMaster.getAllForAverageClass = (level, sectionId, className ,  result) => {
+MarkMaster.getAllForAverageClass = (level, sectionId, className, result) => {
    sql.query(
       `SELECT student.college_number , markmaster.degree , markmaster.studentId , markmaster.status ,markmaster.idMarkMaster, markmaster.examType, lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level} AND newmastersheet.class = '${className}'`,
       (err, res) => {
@@ -113,7 +113,6 @@ MarkMaster.getAllForAverageClass = (level, sectionId, className ,  result) => {
       }
    );
 };
-
 
 MarkMaster.getStudentForAverage = (level, sectionId, collageNumber, result) => {
    console.log(collageNumber);
@@ -130,7 +129,6 @@ MarkMaster.getStudentForAverage = (level, sectionId, collageNumber, result) => {
       }
    );
 };
-
 
 MarkMaster.getQuery = (sqlQuery, result) => {
    sql.query(`${sqlQuery}`, (err, res) => {
@@ -163,7 +161,7 @@ MarkMaster.getSummerTraining = (studentId, result) => {
 
 MarkMaster.findById = (markMasterId, result) => {
    sql.query(
-      `SELECT * FROM markMaster WHERE id = ${markMasterId}`,
+      `SELECT * FROM markmaster WHERE id = ${markMasterId}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -184,7 +182,7 @@ MarkMaster.findById = (markMasterId, result) => {
 
 MarkMaster.updateById = (idMarkMaster, markMaster, result) => {
    sql.query(
-      "UPDATE markMaster SET ? WHERE idMarkMaster = ?",
+      "UPDATE markmaster SET ? WHERE idMarkMaster = ?",
       [markMaster, idMarkMaster],
       (err, res) => {
          if (err) {
@@ -209,7 +207,7 @@ MarkMaster.updateById = (idMarkMaster, markMaster, result) => {
 
 MarkMaster.remove = (idMarkMaster, result) => {
    sql.query(
-      "DELETE FROM markMaster WHERE idMarkMaster = ?",
+      "DELETE FROM markmaster WHERE idMarkMaster = ?",
       idMarkMaster,
       (err, res) => {
          if (err) {

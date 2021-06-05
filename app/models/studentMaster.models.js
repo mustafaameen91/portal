@@ -8,7 +8,7 @@ const StudentMaster = function (studentMaster) {
 
 StudentMaster.create = (newStudentMaster, result) => {
    sql.query(
-      "INSERT INTO studentMaster SET ?",
+      "INSERT INTO studentmaster SET ?",
       newStudentMaster,
       (err, res) => {
          if (err) {
@@ -28,7 +28,7 @@ StudentMaster.create = (newStudentMaster, result) => {
 
 StudentMaster.createMultiStudent = (newStudents, result) => {
    sql.query(
-      "INSERT INTO studentMaster (studentId , masterId , note) VALUES ?",
+      "INSERT INTO studentmaster (studentId , masterId , note) VALUES ?",
       [
          newStudents.map((student) => [
             student.studentId,
@@ -52,7 +52,7 @@ StudentMaster.createMultiStudent = (newStudents, result) => {
 };
 
 StudentMaster.getAll = (result) => {
-   sql.query("SELECT * FROM studentMaster", (err, res) => {
+   sql.query("SELECT * FROM studentmaster", (err, res) => {
       if (err) {
          console.log("error: ", err);
          result(null, err);
@@ -79,7 +79,7 @@ StudentMaster.getQuery = (sqlQuery, result) => {
 
 StudentMaster.findById = (studentMasterId, result) => {
    sql.query(
-      `SELECT * FROM studentMaster WHERE idStudentMaster = ${studentMasterId}`,
+      `SELECT * FROM studentmaster WHERE idStudentMaster = ${studentMasterId}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -100,7 +100,7 @@ StudentMaster.findById = (studentMasterId, result) => {
 
 StudentMaster.updateById = (id, studentMaster, result) => {
    sql.query(
-      "UPDATE studentMaster SET ? WHERE idStudentMaster = ?",
+      "UPDATE studentmaster SET ? WHERE idStudentMaster = ?",
       [studentMaster, id],
       (err, res) => {
          if (err) {
@@ -122,7 +122,7 @@ StudentMaster.updateById = (id, studentMaster, result) => {
 
 StudentMaster.remove = (id, result) => {
    sql.query(
-      "DELETE FROM studentMaster WHERE idStudentMaster = ?",
+      "DELETE FROM studentmaster WHERE idStudentMaster = ?",
       id,
       (err, res) => {
          if (err) {
@@ -135,7 +135,7 @@ StudentMaster.remove = (id, result) => {
             result({ kind: "not_found" }, null);
             return;
          }
-      
+
          // sql.query("DELETE FROM markmaster WHERE studentId = ?" ,[id], (err,res) => {
          //    console.log("ALL MARKS DELETED FOR Student ID: " + id)
          // })
