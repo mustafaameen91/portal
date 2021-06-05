@@ -64,7 +64,7 @@ NewMasterSheet.getByTeacherId = (teacherId, result) => {
 
 NewMasterSheet.getByFilter = (sqlQuery, result) => {
    sql.query(
-      `SELECT * , (SELECT mastertype.typeName FROM mastertype WHERE mastertype.idMasterType = masterTypeId) As masterTypeName , (SELECT COUNT(*) FROM studentMaster WHERE studentMaster.masterId = newmastersheet.idNewMaster) As totalStudents FROM newmastersheet WHERE 1=1 ${sqlQuery}`,
+      `SELECT * , (SELECT mastertype.typeName FROM mastertype WHERE mastertype.idMasterType = masterTypeId) As masterTypeName , (SELECT COUNT(*) FROM studentmaster WHERE studentmaster.masterId = newmastersheet.idNewMaster) As totalStudents FROM newmastersheet WHERE 1=1 ${sqlQuery}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -147,7 +147,7 @@ NewMasterSheet.findDegreeByMasterId = (idNewMaster, result) => {
 
          if (res.length) {
             sql.query(
-               `SELECT idStudentMaster ,studentId , name ,email,sex, college_number ,note FROM studentmaster JOIN student WHERE studentMaster.studentId = student.id AND masterId = ${res[0].idNewMaster}`,
+               `SELECT idStudentMaster ,studentId , name ,email,sex, college_number ,note FROM studentmaster JOIN student WHERE studentmaster.studentId = student.id AND masterId = ${res[0].idNewMaster}`,
                (err, res1) => {
                   if (err) {
                      console.log("error: ", err);
