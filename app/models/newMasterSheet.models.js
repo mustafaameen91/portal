@@ -43,7 +43,7 @@ NewMasterSheet.getAll = (result) => {
 
 NewMasterSheet.getByTeacherId = (teacherId, result) => {
    sql.query(
-      `SELECT (lesson.id) AS lessonId , (lesson.name) AS lessonName , lesson.sectionid , lesson.teacherid , lesson.credit , lesson.required , lesson.mgroupid , lesson.prevlesson , lesson.year , lesson.theoretical , lesson.practical , lesson.final , lesson.level , lesson.enName , lesson.thHoure , lesson.prHoure , lesson.course , lesson.practicalFinal , lesson.yearWorkT , lesson.yearWorkP , newmastersheet.idNewMaster ,  (SELECT type FROM level WHERE level.sectionId = lesson.sectionid AND level.year = lesson.year AND level.level = lesson.level ) AS levelType, newmastersheet.sectionId , newmastersheet.level , newmastersheet.class , newmastersheet.year , newmastersheet.studyType , newmastersheet.date , newmastersheet.masterTypeId , newMasterSheet.course , masterType.idMasterType , masterType.typeName , section.id , section.name FROM lesson JOIN newmastersheet JOIN mastertype JOIN section ON lesson.sectionid = newmastersheet.sectionId AND lesson.year = newmastersheet.year AND lesson.course = newmastersheet.course AND lesson.level = newmastersheet.level AND lesson.sectionid = section.id AND newmastersheet.masterTypeId = mastertype.idMasterType AND newmastersheet.masterTypeId = 1 AND  teacherid = ${teacherId} AND lesson.year = '2020-2021'`,
+      `SELECT (lesson.id) AS lessonId , (lesson.name) AS lessonName , lesson.sectionid , lesson.teacherid , lesson.credit , lesson.required , lesson.mgroupid , lesson.prevlesson , lesson.year , lesson.theoretical , lesson.practical , lesson.final , lesson.level , lesson.enName , lesson.thHoure , lesson.prHoure , lesson.course , lesson.practicalFinal , lesson.yearWorkT , lesson.yearWorkP , newmastersheet.idNewMaster ,  (SELECT type FROM level WHERE level.sectionId = lesson.sectionid AND level.year = lesson.year AND level.level = lesson.level ) AS levelType, newmastersheet.sectionId , newmastersheet.level , newmastersheet.class , newmastersheet.year , newmastersheet.studyType , newmastersheet.date , newmastersheet.masterTypeId , newMasterSheet.course , masterType.idMasterType , mastertype.typeName , section.id , section.name FROM lesson JOIN newmastersheet JOIN mastertype JOIN section ON lesson.sectionid = newmastersheet.sectionId AND lesson.year = newmastersheet.year AND lesson.course = newmastersheet.course AND lesson.level = newmastersheet.level AND lesson.sectionid = section.id AND newmastersheet.masterTypeId = mastertype.idMasterType AND newmastersheet.masterTypeId = 1 AND  teacherid = ${teacherId} AND lesson.year = '2020-2021'`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -64,7 +64,7 @@ NewMasterSheet.getByTeacherId = (teacherId, result) => {
 
 NewMasterSheet.getByFilter = (sqlQuery, result) => {
    sql.query(
-      `SELECT * , (SELECT masterType.typeName FROM masterType WHERE masterType.idMasterType = masterTypeId) As masterTypeName , (SELECT COUNT(*) FROM studentMaster WHERE studentMaster.masterId = newmastersheet.idNewMaster) As totalStudents FROM newmastersheet WHERE 1=1 ${sqlQuery}`,
+      `SELECT * , (SELECT mastertype.typeName FROM masterType WHERE masterType.idMasterType = masterTypeId) As masterTypeName , (SELECT COUNT(*) FROM studentMaster WHERE studentMaster.masterId = newmastersheet.idNewMaster) As totalStudents FROM newmastersheet WHERE 1=1 ${sqlQuery}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
@@ -184,7 +184,7 @@ NewMasterSheet.findDegreeByMasterId = (idNewMaster, result) => {
 //SELECT * FROM newMasterSheet JOIN studentMaster JOIN student JOIN markMaster WHERE newMasterSheet.idNewMaster = studentMaster.masterId AND markMaster.studentId = studentMaster.studentId AND student.id = studentMaster.studentId AND newMasterSheet.idNewMaster = ${idNewMaster}
 NewMasterSheet.findByMasterId = (idNewMaster, result) => {
    sql.query(
-      `SELECT *, (SELECT masterType.typeName FROM masterType WHERE masterType.idMasterType = masterTypeId) As masterTypeName  FROM newmastersheet WHERE idNewMaster = ${idNewMaster}`,
+      `SELECT *, (SELECT mastertype.typeName FROM masterType WHERE masterType.idMasterType = masterTypeId) As masterTypeName  FROM newmastersheet WHERE idNewMaster = ${idNewMaster}`,
       (err, res) => {
          let data = {
             masterSheet: res[0],
@@ -234,7 +234,7 @@ NewMasterSheet.findByMasterId = (idNewMaster, result) => {
 NewMasterSheet.updateById = (idNewMaster, newMasterSheet, result) => {
    console.log(newMasterSheet);
    sql.query(
-      "UPDATE newMasterSheet SET ? WHERE idNewMaster = ?",
+      "UPDATE newmastersheet SET ? WHERE idNewMaster = ?",
       [newMasterSheet, idNewMaster],
       (err, res) => {
          if (err) {
@@ -259,7 +259,7 @@ NewMasterSheet.updateById = (idNewMaster, newMasterSheet, result) => {
 
 NewMasterSheet.remove = (idNewMaster, result) => {
    sql.query(
-      "DELETE FROM newMasterSheet WHERE idNewMaster = ?",
+      "DELETE FROM newmastersheet WHERE idNewMaster = ?",
       idNewMaster,
       (err, res) => {
          if (err) {
@@ -273,7 +273,7 @@ NewMasterSheet.remove = (idNewMaster, result) => {
             return;
          }
          sql.query(
-            `DELETE FROM studentMaster WHERE masterId = ${idNewMaster}`,
+            `DELETE FROM studentmaster WHERE masterId = ${idNewMaster}`,
             (err, resS) => {
                if (err) {
                   result(err, null);
@@ -281,7 +281,7 @@ NewMasterSheet.remove = (idNewMaster, result) => {
                   return;
                } else {
                   sql.query(
-                     `DELETE FROM studentMaster WHERE masterId =${idNewMaster} `,
+                     `DELETE FROM studentmaster WHERE masterId =${idNewMaster} `,
                      (err, resM) => {
                         if (err) {
                            result(err, null);
