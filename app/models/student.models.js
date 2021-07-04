@@ -67,6 +67,27 @@ Student.findById = (studentId, result) => {
    });
 };
 
+Student.getBySections = (sqlQuery, result) => {
+   sql.query(
+      `SELECT student.sectionid , student.name ,student.level , student.college_number, section.name AS sectionName  FROM student JOIN section on student.sectionid = section.id WHERE 1=1 ${sqlQuery} ORDER BY sectionid DESC`,
+      (err, res) => {
+         if (err) {
+            console.log("error: ", err);
+            result(err, null);
+            return;
+         }
+
+         if (res.length) {
+            console.log("found student: ", res);
+            result(null, res);
+            return;
+         }
+
+         result({ kind: "not_found" }, null);
+      }
+   );
+};
+
 Student.getByStudentName = (studentName, result) => {
    sql.query(
       `SELECT * FROM student WHERE name = "${studentName}"`,

@@ -2,7 +2,6 @@ const NewMasterSheet = require("../models/newMasterSheet.models.js");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 
-
 let transporter = nodemailer.createTransport(
    smtpTransport({
       service: "gmail",
@@ -22,7 +21,6 @@ let mailOptions = {
    text: "",
 };
 
-
 exports.create = (req, res) => {
    if (!req.body) {
       res.status(400).send({
@@ -39,7 +37,7 @@ exports.create = (req, res) => {
       masterTypeId: req.body.masterTypeId,
       course: req.body.course,
       note: "",
-      downgrade: 0
+      downgrade: 0,
    });
 
    NewMasterSheet.create(newMasterSheet, (err, data) => {
@@ -66,17 +64,12 @@ exports.findAll = (req, res) => {
 };
 
 exports.sendMailToStudent = (req, res) => {
+   console.log(req.body.body);
 
-   console.log(req.body.body)
+   if (req.body.email.length > 0) {
+      mailOptions.to = req.body.email;
 
-   if(req.body.email.length > 0){
-
-   
-   mailOptions.to = req.body.email;
-
-
-
-   let messageBody = `
+      let messageBody = `
          <html lang="ar" dir="rtl">
             <head>
                <style>
@@ -135,28 +128,26 @@ exports.sendMailToStudent = (req, res) => {
          </html>
          `;
 
-   mailOptions.html = messageBody;
+      mailOptions.html = messageBody;
 
-   transporter.sendMail(mailOptions, (err, data) => {
-      if (err) {
-         console.log(err);
-         console.log('error with sending email')
-         res.status(500).send({
-            message: "the information is not correct",
-         });
-         return;
-      } else {
-         res.status(200).send({
-            message: "the email has been send",
-         });
-      }
-   });
-
-}else{
-   console.log('email not found')
-}
+      transporter.sendMail(mailOptions, (err, data) => {
+         if (err) {
+            console.log(err);
+            console.log("error with sending email");
+            res.status(500).send({
+               message: "the information is not correct",
+            });
+            return;
+         } else {
+            res.status(200).send({
+               message: "the email has been send",
+            });
+         }
+      });
+   } else {
+      console.log("email not found");
+   }
 };
-
 
 exports.findByTeacherId = (req, res) => {
    NewMasterSheet.getByTeacherId(req.query.teacherId, (err, data) => {
@@ -182,7 +173,7 @@ exports.findByFilter = (req, res) => {
    let sClass = req.query.class;
    let year = req.query.year;
    let course = req.query.course;
-   let studyType = req.query.studyType
+   let studyType = req.query.studyType;
 
    let sqlQuery = "";
 
@@ -244,17 +235,15 @@ exports.findOne = (req, res) => {
    });
 };
 
-
-
-exports.getStudentIdMaster = (req , res) =>{
-   NewMasterSheet.findStudentId(req.params.studentId , (err , data) =>{
-      if(err){
-         res.send(err)
-      }else{
-         res.send(data)
+exports.getStudentIdMaster = (req, res) => {
+   NewMasterSheet.findStudentId(req.params.studentId, (err, data) => {
+      if (err) {
+         res.send(err);
+      } else {
+         res.send(data);
       }
-   })
-}
+   });
+};
 
 exports.findAllByMasterIdLast = (req, res) => {
    let lessonId = req.query.lessonId;

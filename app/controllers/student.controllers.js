@@ -116,6 +116,33 @@ exports.findOne = (req, res) => {
    });
 };
 
+exports.findBySections = (req, res) => {
+   let sectionData = JSON.parse(req.query.students);
+
+   let sqlQuery = "";
+
+   sectionData.forEach((section, index) => {
+      if (index == 0) {
+         sqlQuery += ` AND (student.sectionid = ${section.sectionId} AND student.level = ${section.level} AND student.status = 1)`;
+      } else {
+         sqlQuery += ` OR (student.sectionid = ${section.sectionId} AND student.level = ${section.level} AND student.status = 1)`;
+      }
+   });
+   Student.getBySections(sqlQuery, (err, data) => {
+      if (err) {
+         if (err.kind === "not_found") {
+            res.status(404).send({
+               message: `Not found student with sectionId.`,
+            });
+         } else {
+            res.status(500).send({
+               message: "Error retrieving student with sectionId",
+            });
+         }
+      } else res.send(data);
+   });
+};
+
 exports.findStudentInfo = (req, res) => {
    const page = parseInt(req.query.page);
    const limit = parseInt(req.query.limit);
@@ -133,7 +160,7 @@ exports.findStudentInfo = (req, res) => {
    let grdat = req.query.grdat;
    let manyStatus = req.query.manyStatus * 1;
 
-   console.log(sectionId)
+   console.log(sectionId);
 
    let sqlQuery = "";
 
@@ -149,15 +176,12 @@ exports.findStudentInfo = (req, res) => {
    }
 
    if (manyStatus) {
-     
       sqlQuery += `AND status IN ${status} `;
    } else {
       if (status) {
          sqlQuery += `AND status = '${status}' `;
       }
    }
-
-
 
    if (className) {
       sqlQuery += `AND class = '${className}' `;
@@ -186,9 +210,6 @@ exports.findStudentInfo = (req, res) => {
       } else res.send(data);
    });
 };
-
-
-
 
 exports.findStudentInfoSignUp = (req, res) => {
    const page = parseInt(req.query.page);
@@ -211,7 +232,7 @@ exports.findStudentInfoSignUp = (req, res) => {
    let enter_year = req.query.enterYear;
    let grad_year = req.query.gradYear;
 
-   console.log(sectionId)
+   console.log(sectionId);
 
    let sqlQuery = "";
 
@@ -227,7 +248,6 @@ exports.findStudentInfoSignUp = (req, res) => {
       sqlQuery += `AND grdat = '${grad_year}' `;
    }
 
-   
    if (name) {
       sqlQuery += `AND name LIKE '%${name}%' `;
    }
@@ -237,15 +257,12 @@ exports.findStudentInfoSignUp = (req, res) => {
    }
 
    if (manyStatus) {
-     
       sqlQuery += `AND status IN ${status} `;
    } else {
       if (status) {
          sqlQuery += `AND status = '${status}' `;
       }
    }
-
-
 
    if (className) {
       sqlQuery += `AND class = '${className}' `;
@@ -274,7 +291,6 @@ exports.findStudentInfoSignUp = (req, res) => {
       } else res.send(data);
    });
 };
-
 
 exports.update = (req, res) => {
    if (!req.body) {
