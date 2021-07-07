@@ -7,11 +7,14 @@ module.exports = (app) => {
 
    app.get("/api/v2/allMasterSheet/:id", NewMasterSheet.findOneByMasterId);
 
-   app.get("/api/v2/checkMasters/:studentId", NewMasterSheet.getStudentIdMaster);
-   
+   app.get(
+      "/api/v2/checkMasters/:studentId",
+      NewMasterSheet.getStudentIdMaster
+   );
+
    app.get("/api/v2/allMasterSheet", NewMasterSheet.findByFilter);
 
-   app.get("/api/v2/getMastersByTeacherId", NewMasterSheet.findByTeacherId);
+   // app.get("/api/v2/getMastersByTeacherId", NewMasterSheet.findByTeacherId);
 
    app.get("/api/v2/getByQuery", NewMasterSheet.findQuery);
 

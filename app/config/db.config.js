@@ -8,8 +8,8 @@
 
 module.exports = {
    HOST: "localhost",
-   USER: "devone",
-   PASSWORD: "uni_Dijla_87601",
+   USER: "root",
+   PASSWORD: "",
    DB: "portal",
    PORT: 3306,
 };
