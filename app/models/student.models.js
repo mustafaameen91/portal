@@ -69,7 +69,7 @@ Student.findById = (studentId, result) => {
 
 Student.getBySections = (sqlQuery, result) => {
    sql.query(
-      `SELECT student.sectionid , student.name ,student.level , student.college_number, section.name AS sectionName  FROM student JOIN section on student.sectionid = section.id WHERE 1=1 ${sqlQuery} ORDER BY sectionid DESC`,
+      `SELECT student.sectionid , student.name ,student.level , student.college_number, section.name AS sectionName  FROM student JOIN section on student.sectionid = section.id WHERE 1=1 ${sqlQuery} `,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
