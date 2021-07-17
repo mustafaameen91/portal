@@ -281,7 +281,7 @@ NewMasterSheet.remove = (idNewMaster, result) => {
                   return;
                } else {
                   sql.query(
-                     `DELETE FROM studentmaster WHERE masterId =${idNewMaster} `,
+                     `DELETE FROM markMaster WHERE masterId =${idNewMaster} `,
                      (err, resM) => {
                         if (err) {
                            result(err, null);
