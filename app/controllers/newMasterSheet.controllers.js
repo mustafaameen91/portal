@@ -17,7 +17,7 @@ let transporter = nodemailer.createTransport(
 let mailOptions = {
    from: "result@duc.edu.iq",
    to: "",
-   subject: " نتيجة الامتحان النهائي",
+   subject: "السعي السنوي",
    text: "",
 };
 
