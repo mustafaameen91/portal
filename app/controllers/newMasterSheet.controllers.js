@@ -8,7 +8,7 @@ let transporter = nodemailer.createTransport(
       pool: true,
       port: 465,
       auth: {
-         user: "results5@duc.edu.iq",
+         user: "results6@duc.edu.iq",
          pass: "Rr123123",
       },
    })

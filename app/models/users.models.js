@@ -85,7 +85,7 @@ Users.updateById = (id, user, result) => {
 
 Users.login = (userName, password, result) => {
    sql.query(
-      `SELECT user.name , user.id , user.perv , user.prev2 , (SELECT name  FROM section WHERE id = user.perv) AS sectionName,(SELECT registerName  FROM section WHERE id = user.perv) AS fullName,(SELECT type  FROM section WHERE id = user.perv) AS course,(SELECT val FROM \`system\` WHERE var = \'currentYear\') AS currentYear , 'ok' AS message FROM user WHERE name = "${userName}" AND password = "${password}"`,
+      `SELECT user.name , user.id , user.perv , user.prev2 , (SELECT name  FROM section WHERE id = user.perv) AS sectionName,(SELECT registerName  FROM section WHERE id = user.perv) AS fullName,(SELECT type  FROM level WHERE id = user.perv) AS course,(SELECT val FROM \`system\` WHERE var = \'currentYear\') AS currentYear , 'ok' AS message FROM user WHERE name = "${userName}" AND password = "${password}"`,
       (err, res) => {
          if (err) {
             result(null, err);
