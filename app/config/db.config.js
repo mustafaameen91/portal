@@ -10,8 +10,10 @@ module.exports = {
    HOST: "localhost",
    // USER: "root",
    // PASSWORD: "",
-   USER: "devone",
-   PASSWORD: "uni_Dijla_87601",
+   // USER: "devone",
+   // PASSWORD: "uni_Dijla_87601",
+   USER: "root",
+   PASSWORD: "vA47u2Byx5LmbjDj",
    DB: "portal",
    PORT: 3306,
 };
