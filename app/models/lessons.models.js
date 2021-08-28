@@ -53,7 +53,7 @@ Lesson.getAll = (sqlQuery, result) => {
 
 Lesson.getAverageLessons = (sectionId, level, year, result) => {
    sql.query(
-      `SELECT  SUM(credit)  total FROM lesson WHERE sectionid = ${sectionId} AND year = ${year} AND level = ${level}`,
+      `SELECT  SUM(credit)  total FROM lesson WHERE sectionid = ${sectionId} AND year = '${year}' AND level = ${level}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

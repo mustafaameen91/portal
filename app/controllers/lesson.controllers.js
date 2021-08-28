@@ -79,6 +79,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.findAverageLessons = (req, res) => {
+   console.log(req.query.year);
    Lesson.getAverageLessons(
       req.query.sectionId,
       req.query.level,

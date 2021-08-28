@@ -93,7 +93,7 @@ MarkMaster.getAllForAverages = (level, sectionId, result) => {
             result(null, err);
             return;
          }
-         console.log("mark Masters: ", res);
+         // console.log("mark Masters: ", res);
          result(null, res);
       }
    );
