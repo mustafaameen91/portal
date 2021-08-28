@@ -82,6 +82,7 @@ exports.findAverageLessons = (req, res) => {
    Lesson.getAverageLessons(
       req.query.sectionId,
       req.query.level,
+      req.query.year,
       (err, data) => {
          if (err)
             res.status(500).send({
