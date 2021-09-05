@@ -99,6 +99,7 @@ exports.findLessonsForSection = (req, res) => {
    Lesson.getLessonsForSection(
       req.query.sectionId,
       req.query.level,
+      req.query.year,
       (err, data) => {
          if (err)
             res.status(500).send({

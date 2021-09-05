@@ -67,9 +67,9 @@ Lesson.getAverageLessons = (sectionId, level, year, result) => {
    );
 };
 
-Lesson.getLessonsForSection = (sectionId, level, result) => {
+Lesson.getLessonsForSection = (sectionId, level, year, result) => {
    sql.query(
-      `SELECT * FROM lesson WHERE sectionid = ${sectionId} AND level = ${level}`,
+      `SELECT * FROM lesson WHERE sectionid = ${sectionId} AND level = ${level} AND year = ${year}`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);

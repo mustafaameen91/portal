@@ -84,9 +84,9 @@ MarkMaster.getStudentAllMarks = (level, sectionId, collegeNumber, result) => {
    );
 };
 
-MarkMaster.getAllForAverages = (level, sectionId, result) => {
+MarkMaster.getAllForAverages = (level, sectionId, year, result) => {
    sql.query(
-      `SELECT student.college_number , markmaster.degree , lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM markmaster JOIN newmastersheet JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level}`,
+      `SELECT student.college_number , markmaster.degree , lesson.id AS lessonId ,lesson.enName ,  markmaster.markType , lesson.credit FROM newmastersheet JOIN markmaster JOIN lesson JOIN student ON markmaster.masterId = newmastersheet.idNewMaster AND markmaster.lessonId = lesson.id AND markmaster.studentId = student.id WHERE newmastersheet.sectionId = ${sectionId} AND newmastersheet.level = ${level} AND newmastersheet.year = '${year}'`,
       (err, res) => {
          if (err) {
             console.log("error: ", err);
