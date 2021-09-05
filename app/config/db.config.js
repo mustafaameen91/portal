@@ -17,6 +17,6 @@ module.exports = {
    // USER: "root",
    // PASSWORD: "vA47u2Byx5LmbjDj",
    // PASSWORD: "Hh123123!@",
-   DB: "portalThree",
+   DB: "portal",
    PORT: 3306,
 };
