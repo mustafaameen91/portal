@@ -44,7 +44,6 @@ Lesson.getAll = (sqlQuery, result) => {
             result(null, err);
             return;
          }
-
          // console.log("lessons: ", res);
          result(null, res);
       }
@@ -60,7 +59,6 @@ Lesson.getAverageLessons = (sectionId, level, year, result) => {
             result(null, err);
             return;
          }
-
          // console.log("lessons: ", res);
          result(null, res);
       }
